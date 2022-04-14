@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="801.0" prefWidth="1365.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.MainController">
+    <children>
+        <AnchorPane prefHeight="818.0" prefWidth="294.0">
+            <children>
+                <VBox prefHeight="801.0" prefWidth="294.0" style="-fx-background-color: #616366;">
+                    <children>
+                        <Pane prefHeight="150.0" prefWidth="217.0">
+                            <children>
+                                <HBox alignment="CENTER" layoutX="-3.0" prefHeight="150.0" prefWidth="294.0">
+                                    <children>
+                                        <ImageView fitHeight="90.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../image/staff_ic.png" />
+                                            </image></ImageView>
+                                        <Label alignment="CENTER" blendMode="SRC_ATOP" nodeOrientation="RIGHT_TO_LEFT" prefHeight="84.0" prefWidth="137.0" text="STAFF" textAlignment="CENTER" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
+                                            <font>
+                                                <Font name="Agency FB Bold" size="50.0" />
+                                            </font></Label>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </Pane>
+                        <Button fx:id="buttonHome" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="70.0" prefWidth="292.0" style="-fx-background-color: #4a4c4f;" text="Home" textFill="WHITE">
+                            <font>
+                                <Font name="Agency FB" size="30.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </Button>
+                        <Button fx:id="buttonMovieScreens" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="314.0" style="-fx-background-color: #616366;" text="Movie Screens" textFill="WHITE">
+                            <font>
+                                <Font name="Agency FB" size="30.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="buttonAdd" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="296.0" style="-fx-background-color: #616366;" text="More" textFill="WHITE">
+                            <font>
+                                <Font name="Agency FB" size="30.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin></Button>
+                        <Button fx:id="buttonLogout" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="294.0" style="-fx-background-color: #616366;" text="Log out" textFill="WHITE">
+                            <font>
+                                <Font name="Agency FB" size="30.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin></Button>
+                    </children></VBox>
+            </children></AnchorPane>
+        <StackPane prefHeight="801.0" prefWidth="1113.0">
+            <children>
+                <Pane fx:id="gridPaneMovieScreens" style="-fx-background-color: #ff6666;" />
+                <Pane fx:id="gridPaneLogOut" style="-fx-background-color: #ff3333;" />
+                <Pane fx:id="gridPaneAdd" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #a0a832;" />
+            <HBox fx:id="gridPaneHome">
+               <children>
+                  <VBox alignment="TOP_CENTER">
+                     <children>
+                        <StackPane prefHeight="825.0" prefWidth="1071.0">
+                           <children>
+                              <ScrollPane fx:id="scrollPaneSearch" prefHeight="200.0" prefWidth="200.0">
+                                 <content>
+                                    <GridPane prefHeight="422.0" prefWidth="1066.0">
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label fx:id="filmText" alignment="CENTER" prefHeight="17.0" prefWidth="651.0" text="SEARCH MOVIE">
+                                             <font>
+                                                <Font name="Agency FB" size="63.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints />
+                                       </columnConstraints>
+                                    </GridPane>
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="scrollPane" prefHeight="816.0" prefWidth="1071.0">
+                                 <content>
+                                    <VBox prefHeight="38.0" prefWidth="1070.0">
+                                       <children>
+                                          <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                             <children>
+                                                <TextField fx:id="textFieldSearch" alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="219.0">
+                                                   <HBox.margin>
+                                                      <Insets top="4.0" />
+                                                   </HBox.margin>
+                                                </TextField>
+                                                <Button fx:id="buttonSearch" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#onClickSearch" text="Search Movie" underline="true">
+                                                   <font>
+                                                      <Font name="Agency FB" size="16.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets right="50.0" top="10.0" />
+                                             </VBox.margin>
+                                          </HBox>
+            
+                                           <GridPane fx:id="gridAdapter" prefHeight="22.0" prefWidth="707.0">
+                                               <rowConstraints>
+                                                   <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                               </rowConstraints>
+                                           </GridPane>
+                                       </children>
+                                    </VBox>
+      
+                                 </content>
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </ScrollPane>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
+               </children></HBox>
+            </children>
+        </StackPane>
+    </children>
+</HBox>
