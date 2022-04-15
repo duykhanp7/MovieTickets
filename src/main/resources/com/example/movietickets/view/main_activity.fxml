@@ -70,35 +70,53 @@
                            <children>
                               <ScrollPane fx:id="scrollPaneSearch" prefHeight="200.0" prefWidth="200.0">
                                  <content>
-                                    <GridPane prefHeight="422.0" prefWidth="1066.0">
-                                      <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
+                                    <VBox prefHeight="800.0" prefWidth="1069.0">
                                        <children>
-                                          <Label fx:id="filmText" alignment="CENTER" prefHeight="17.0" prefWidth="651.0" text="SEARCH MOVIE">
-                                             <font>
-                                                <Font name="Agency FB" size="63.0" />
-                                             </font>
-                                          </Label>
+                                          <HBox alignment="TOP_RIGHT" prefHeight="45.0" prefWidth="1069.0">
+                                             <children>
+                                                <TextField fx:id="textFieldSearchSub" alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="221.0">
+                                                   <HBox.margin>
+                                                      <Insets right="16.0" top="14.0" />
+                                                   </HBox.margin>
+                                                   <font>
+                                                      <Font name="Agency FB" size="14.0" />
+                                                   </font></TextField>
+                                                <Button fx:id="buttonSearchSub" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="34.0" prefWidth="94.0" text="Search Movie">
+                                                   <font>
+                                                      <Font name="Agency FB" size="16.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="26.0" top="10.0" />
+                                                   </HBox.margin></Button>
+                                             </children>
+                                             <padding>
+                                                <Insets right="20.0" />
+                                             </padding>
+                                          </HBox>
+                                          <GridPane fx:id="gridLayoutItemSearch" prefHeight="198.0" prefWidth="135.0">
+                                            <rowConstraints>
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                          </GridPane>
                                        </children>
-                                       <columnConstraints>
-                                          <ColumnConstraints />
-                                       </columnConstraints>
-                                    </GridPane>
+                                    </VBox>
                                  </content>
                               </ScrollPane>
                               <ScrollPane fx:id="scrollPane" prefHeight="816.0" prefWidth="1071.0">
                                  <content>
-                                    <VBox prefHeight="38.0" prefWidth="1070.0">
+                                    <VBox prefHeight="802.0" prefWidth="1070.0">
                                        <children>
-                                          <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                          <HBox alignment="TOP_RIGHT" prefHeight="66.0" prefWidth="1020.0" spacing="20.0">
                                              <children>
                                                 <TextField fx:id="textFieldSearch" alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="219.0">
                                                    <HBox.margin>
                                                       <Insets top="4.0" />
                                                    </HBox.margin>
+                                                   <font>
+                                                      <Font name="Agency FB" size="14.0" />
+                                                   </font>
                                                 </TextField>
-                                                <Button fx:id="buttonSearch" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#onClickSearch" text="Search Movie" underline="true">
+                                                <Button fx:id="buttonSearch" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#onClickSearch" prefHeight="33.0" prefWidth="90.0" text="Search Movie" underline="true">
                                                    <font>
                                                       <Font name="Agency FB" size="16.0" />
                                                    </font>
@@ -109,7 +127,7 @@
                                              </VBox.margin>
                                           </HBox>
             
-                                           <GridPane fx:id="gridAdapter" prefHeight="22.0" prefWidth="707.0">
+                                           <GridPane fx:id="gridAdapter" prefHeight="262.0" prefWidth="317.0">
                                                <rowConstraints>
                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
                                                </rowConstraints>

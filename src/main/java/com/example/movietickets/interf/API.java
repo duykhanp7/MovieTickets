@@ -22,5 +22,11 @@ public interface API {
     //https://api.themoviedb.org/3/movie/popular?api_key=904b3059ddd54e71c45dc72502d59375&page=2
     @GET("/3/movie/popular")
     Call<MovieObject> getMoviesPopular(@Query("api_key") String api_key,@Query("page") String page);
+
+
+    //TÌM KIẾM MOVIE THEO TÊN PHIM
+    //https://api.themoviedb.org/3/search/movie?api_key=904b3059ddd54e71c45dc72502d59375&query=the avenger&page=3
+    @GET("/3/search/movie")
+    Call<MovieObject> getMoviesByKeyword(@Query("api_key") String api_key, @Query("query") String query,@Query("page") String page);
 }
 

@@ -17,6 +17,9 @@ public class MovieObject {
     @SerializedName("page")
     public String page;
 
+    @SerializedName("total_pages")//BẮT ĐẦU TỪ PAGE SỐ 1
+    public String total_pages;
+
     @SerializedName("results")
     public List<MovieObject.Movie> movies;
 
@@ -29,6 +32,14 @@ public class MovieObject {
 
     public void setPage(String page) {
         this.page = page;
+    }
+
+    public String getTotal_pages() {
+        return total_pages;
+    }
+
+    public void setTotal_pages(String total_pages) {
+        this.total_pages = total_pages;
     }
 
     public List<MovieObject.Movie> getMovies() {

@@ -41,24 +41,34 @@ public class MainController implements Initializable, OnItemClickedListener {
     @FXML private Button buttonLogout;
 
     @FXML HBox gridPaneHome;
+
     @FXML Pane gridPaneAdd;
     @FXML Pane gridPaneMovieScreens;
     @FXML Pane gridPaneLogOut;
+
     @FXML GridPane gridAdapter;
+    @FXML GridPane gridLayoutItemSearch;
+
     @FXML ScrollPane scrollPane;
     @FXML ScrollPane scrollPaneSearch;
 
     @FXML Button buttonSearch;
     @FXML TextField textFieldSearch;
-
-    @FXML Label filmText;
+    @FXML Button buttonSearchSub;
+    @FXML TextField textFieldSearchSub;
 
     //DANH SÁCH PHIM PHỔ BIẾN
     List<MovieObject> popularMovies = new ArrayList<>();
 
-    int pageMain = 1;
     int column = 0;
     int row = 2;
+    int columnSearch = 0;
+    int rowSearch = 1;
+
+    int pageMain = 1;
+    int maxPageMain = 0;
+    int pageSearch = 1;
+    int maxPageSearch = 0;
 
     public MainController() {}
 
@@ -78,6 +88,7 @@ public class MainController implements Initializable, OnItemClickedListener {
 
         //KHI SCROLL ĐẾN CUỐI THÌ BẮT ĐẦU LẤY DỮ LIỆU TỪ PAGE TIẾP THEO
         // ĐEM VỀ THEO VÀO GRIDLAYOUT
+        //SCROLL PANE SHOW MOVIE
         scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
@@ -87,7 +98,30 @@ public class MainController implements Initializable, OnItemClickedListener {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            getDataFromAPI(++pageMain);
+                            if(pageMain <= maxPageMain){
+                                getDataFromAPI(++pageMain);
+                            }
+                        }
+                    }).start();
+                }
+            }
+        });
+
+        //SCROLL PANE SHOW MOVIE SEARCH BY TITLE
+        scrollPaneSearch.vvalueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newValue) {
+                if(newValue.equals(1.0)){
+                    System.out.println("SCROLL TO END");
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(pageSearch <= maxPageSearch){
+                                String text = textFieldSearch.getText().trim().toString();
+                                if(!text.isEmpty()){
+                                    InitLayoutContainMoviesResult(text,++pageSearch);
+                                }
+                            }
                         }
                     }).start();
                 }
@@ -143,6 +177,7 @@ public class MainController implements Initializable, OnItemClickedListener {
     private void onButtonClicked(ActionEvent actionEvent) {
         if (actionEvent.getSource() == this.buttonHome) {
             this.gridPaneHome.toFront();
+            scrollPane.toFront();
             System.out.println("BUTTON HOME CLICKED");
         } else if (actionEvent.getSource() == this.buttonAdd) {
             this.gridPaneAdd.toFront();
@@ -197,6 +232,7 @@ public class MainController implements Initializable, OnItemClickedListener {
                     popularMovies.add(response.body());
                     System.out.println("NOT NULL : "+response.body().movies.size());
                     MovieObject movieObject = response.body();
+                    maxPageMain = Integer.parseInt(movieObject.getTotal_pages());
                     try {
                         for (int i = 0; i < movieObject.getMovies().size(); i++) {
                             MovieObject.Movie item = movieObject.getMovies().get(i);
@@ -255,7 +291,9 @@ public class MainController implements Initializable, OnItemClickedListener {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            getDataFromAPI(++pageMain);
+                            if(pageMain <= maxPageMain){
+                                getDataFromAPI(++pageMain);
+                            }
                         }
                     }).start();
                 }
@@ -275,12 +313,99 @@ public class MainController implements Initializable, OnItemClickedListener {
         System.out.println("ITEM CLICKED IS : "+item.getId()+" -- "+item.getTitle());
     }
 
+
+    //BẮT SỰ KIỆN CLICK TRÊN BUTTON SEARCH
+    //NẾU RỖNG THÌ KHÔNG CHUYỂN LAYOUT, NGƯỢC LẠI THÌ CHUYỂN
     @FXML
     public void onClickSearch(ActionEvent actionEvent){
         if(actionEvent.getSource() == buttonSearch){
-            scrollPaneSearch.toFront();
-            filmText.setText(textFieldSearch.getText().toString());
+            String keyword = textFieldSearch.getText().trim().toString();
+            if(!keyword.isEmpty()){
+                InitLayoutContainMoviesResult(keyword,pageSearch);
+                scrollPaneSearch.toFront();
+                textFieldSearchSub.setText(textFieldSearch.getText().trim().toString());
+            }
         }
+    }
+
+
+    public synchronized void InitLayoutContainMoviesResult(String keyword,int page){
+        API.api.getMoviesByKeyword(Utils.API_KEY,keyword,String.valueOf(page)).enqueue(new Callback<MovieObject>() {
+            @Override
+            public void onResponse(Call<MovieObject> call, Response<MovieObject> response) {
+
+                if(response.body().getMovies().size() > 0){
+                    System.out.println("NOT NULL : "+response.body().movies.size());
+                    MovieObject movieObject = response.body();
+                    maxPageSearch = Integer.parseInt(movieObject.getTotal_pages());
+                    try {
+                        for (int i = 0; i < movieObject.getMovies().size(); i++) {
+                            MovieObject.Movie item = movieObject.getMovies().get(i);
+
+                            System.out.println("ITEM GET IS : "+item.getId()+" -- "+item.getPoster_path());
+
+                            FXMLLoader loader = new FXMLLoader();
+                            loader.setLocation(getClass().getResource("view/item_movie.fxml"));
+                            AnchorPane anchorPane = null;
+                            try {
+                                anchorPane = loader.load();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            //ĐƯA DỮ LIỆU VÀO VIEW
+                            ItemMovieController itemController = loader.getController();
+                            itemController.setData(item,MainController.this);
+
+                            //LAYOUT ITEM
+                            AnchorPane finalAnchorPane = anchorPane;
+
+                            //CHO CHẠY TRONG HÀM RUN LATER ĐỂ TRÁNH CRASH LUỒNG CHÍNH
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    //NẾU ĐỦ 6 ITEMS TRÊN 1 HÀNG THÌ
+                                    //CHUYỂN SANG HÀNG TIẾP THEO
+                                    if (columnSearch == 6) {
+                                        columnSearch = 0;
+                                        rowSearch++;
+                                    }
+                                    gridLayoutItemSearch.add(finalAnchorPane, columnSearch++, rowSearch); //(child,column,row)
+                                    //set grid width
+                                    gridLayoutItemSearch.setMinWidth(Region.USE_COMPUTED_SIZE);
+                                    gridLayoutItemSearch.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                                    gridLayoutItemSearch.setMaxWidth(Region.USE_PREF_SIZE);
+
+                                    //set grid height
+                                    gridLayoutItemSearch.setMinHeight(Region.USE_COMPUTED_SIZE);
+                                    gridLayoutItemSearch.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                                    gridLayoutItemSearch.setMaxHeight(Region.USE_PREF_SIZE);
+                                }
+                            });
+
+                            GridPane.setMargin(anchorPane, new Insets(10,0,5,10));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                //NẾU NULL THÌ GỌI LẠI API LẤY DỮ LIỆU CỦA PAGE KHÁC ĐỔ VỀ
+                else{
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    }).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieObject> call, Throwable throwable) {
+                System.out.println("ON GET MOVIES BY TITLE FAILED");
+            }
+        });
     }
 
 }

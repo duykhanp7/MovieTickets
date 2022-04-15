@@ -22,14 +22,15 @@ public class ItemMovieController {
     public OnItemClickedListener onItemClickedListener;
 
     public void setData(MovieObject.Movie item,OnItemClickedListener onItemClickedListenerTemp){
-//        Platform.runLater(new Runnable() {
-//            @Override
-//            public void run() {
-//            }
-//        });
         movie = item;
         onItemClickedListener = onItemClickedListenerTemp;
-        itemPosterMovie.setImage(new Image(Utils.path_image_domain+item.getPoster_path()));
+        if(item.getPoster_path() != null){
+            itemPosterMovie.setImage(new Image(Utils.path_image_domain.trim()+item.getPoster_path().trim()));
+        }
+        else{
+            //CREATE A IMAGE WITH BACKGROUND COLOR IS BROWN TO SET WHEN POSTER PATH IS NULL
+            itemPosterMovie.setStyle("-fx-background-color: #a1a0a3");
+        }
         itemTitleMovie.setText(item.getTitle());
     }
 
