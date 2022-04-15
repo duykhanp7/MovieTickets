@@ -39,6 +39,7 @@ public class MainController implements Initializable, OnItemClickedListener {
     @FXML private Button buttonAdd;
     @FXML private Button buttonMovieScreens;
     @FXML private Button buttonLogout;
+    @FXML Button buttonMoviesRecently;
 
     @FXML HBox gridPaneHome;
 
@@ -54,8 +55,10 @@ public class MainController implements Initializable, OnItemClickedListener {
 
     @FXML Button buttonSearch;
     @FXML TextField textFieldSearch;
-    @FXML Button buttonSearchSub;
-    @FXML TextField textFieldSearchSub;
+
+    String oldKeyword="";
+//    @FXML Button buttonSearchSub;
+//    @FXML TextField textFieldSearchSub;
 
     //DANH SÁCH PHIM PHỔ BIẾN
     List<MovieObject> popularMovies = new ArrayList<>();
@@ -65,9 +68,9 @@ public class MainController implements Initializable, OnItemClickedListener {
     int columnSearch = 0;
     int rowSearch = 1;
 
-    int pageMain = 1;
+    int pageMain = 0;
     int maxPageMain = 0;
-    int pageSearch = 1;
+    int pageSearch = 0;
     int maxPageSearch = 0;
 
     public MainController() {}
@@ -77,7 +80,14 @@ public class MainController implements Initializable, OnItemClickedListener {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                getDataFromAPI(pageMain);
+                try {
+                    getDataFromAPI(1);
+                }
+                catch (Exception exception){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Connection error, please check the network again");
+                }
             }
         }).start();
 
@@ -99,7 +109,14 @@ public class MainController implements Initializable, OnItemClickedListener {
                         @Override
                         public void run() {
                             if(pageMain <= maxPageMain){
-                                getDataFromAPI(++pageMain);
+                                try {
+                                    getDataFromAPI(++pageMain);
+                                }
+                                catch (Exception e){
+                                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                                    alert.setTitle("Error");
+                                    alert.setHeaderText("Connection error, please check the network again");
+                                }
                             }
                         }
                     }).start();
@@ -119,7 +136,16 @@ public class MainController implements Initializable, OnItemClickedListener {
                             if(pageSearch <= maxPageSearch){
                                 String text = textFieldSearch.getText().trim().toString();
                                 if(!text.isEmpty()){
-                                    InitLayoutContainMoviesResult(text,++pageSearch);
+                                    //BẮT ĐẦU LẤY DỮ LIỆU
+                                    //NẾU LỖI THÌ SẼ THÔNG BÁO TRONG CATCH
+                                    try {
+                                        InitLayoutContainMoviesResult(text,++pageSearch);
+                                    }
+                                    catch (Exception e){
+                                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                                        alert.setTitle("Error");
+                                        alert.setHeaderText("Connection error, please check the network again");
+                                    }
                                 }
                             }
                         }
@@ -280,7 +306,7 @@ public class MainController implements Initializable, OnItemClickedListener {
                                 }
                             });
 
-                            GridPane.setMargin(anchorPane, new Insets(10,10,20,10));
+                            GridPane.setMargin(anchorPane, new Insets(10,0,20,20));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -292,7 +318,14 @@ public class MainController implements Initializable, OnItemClickedListener {
                         @Override
                         public void run() {
                             if(pageMain <= maxPageMain){
-                                getDataFromAPI(++pageMain);
+                                try {
+                                    getDataFromAPI(++pageMain);
+                                }
+                                catch (Exception e){
+                                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                                    alert.setTitle("Error");
+                                    alert.setHeaderText("Connection error, please check the network again");
+                                }
                             }
                         }
                     }).start();
@@ -319,16 +352,38 @@ public class MainController implements Initializable, OnItemClickedListener {
     @FXML
     public void onClickSearch(ActionEvent actionEvent){
         if(actionEvent.getSource() == buttonSearch){
-            String keyword = textFieldSearch.getText().trim().toString();
-            if(!keyword.isEmpty()){
-                InitLayoutContainMoviesResult(keyword,pageSearch);
+            String keyword = textFieldSearch.getText().trim().toString().toLowerCase();
+
+            //NẾU KEYWORD MỚI VÀ CŨ TRÙNG NHAU THÌ KHÔNG CẦN LOAD LẠI
+            if(!oldKeyword.equals(keyword)){
+                oldKeyword = keyword;
+                if(!keyword.isEmpty()){
+                    System.out.println("KEYWORD NOT EMPTY");
+                    pageSearch = 0;
+                    columnSearch = 0;
+                    rowSearch = 1;
+                    if(gridLayoutItemSearch.getChildren().size() > 0){
+                        gridLayoutItemSearch.getChildren().clear();
+                    }
+                    //BẮT ĐẦU LẤY DỮ LIỆU TỪ API
+                    try {
+                        InitLayoutContainMoviesResult(keyword,++pageSearch);
+                    }
+                    catch (Exception e){
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Connection error, please check the network again");
+                    }
+                }
+            }
+            if(!keyword.trim().isEmpty()){
                 scrollPaneSearch.toFront();
-                textFieldSearchSub.setText(textFieldSearch.getText().trim().toString());
             }
         }
     }
 
 
+    //LẤY DANH SÁCH PHIM DỰA THEO TÊN PHIM
     public synchronized void InitLayoutContainMoviesResult(String keyword,int page){
         API.api.getMoviesByKeyword(Utils.API_KEY,keyword,String.valueOf(page)).enqueue(new Callback<MovieObject>() {
             @Override
@@ -384,20 +439,26 @@ public class MainController implements Initializable, OnItemClickedListener {
                                 }
                             });
 
-                            GridPane.setMargin(anchorPane, new Insets(10,0,5,10));
+                            GridPane.setMargin(anchorPane,new Insets(10,0,10,10));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-                //NẾU NULL THÌ GỌI LẠI API LẤY DỮ LIỆU CỦA PAGE KHÁC ĐỔ VỀ
                 else{
-                    new Thread(new Runnable() {
+                    pageSearch = 1;
+                    maxPageSearch = 0;
+                    System.out.println("PAGE IS : "+pageSearch+" -- "+maxPageSearch+" -- "+keyword);
+                    //HIỂN THỊ THÔNG BÁO KHÔNG CÓ KẾT QUẢ NÀO TRÙNG KHỚP VỚI KEYWORD ĐÃ NHẬP
+                    Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Notification !");
+                            alert.setHeaderText("There are no matching results !");
+                            alert.showAndWait();
                         }
-                    }).start();
+                    });
                 }
             }
 

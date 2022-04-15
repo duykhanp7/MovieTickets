@@ -59,41 +59,48 @@
             </children></AnchorPane>
         <StackPane prefHeight="801.0" prefWidth="1113.0">
             <children>
-                <Pane fx:id="gridPaneMovieScreens" style="-fx-background-color: #ff6666;" />
-                <Pane fx:id="gridPaneLogOut" style="-fx-background-color: #ff3333;" />
-                <Pane fx:id="gridPaneAdd" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #a0a832;" />
+                <Pane fx:id="gridPaneMovieScreens" style="-fx-background-color: #8f968d;" />
+                <Pane fx:id="gridPaneLogOut" style="-fx-background-color: #1f5411#1f5411;" />
+                <Pane fx:id="gridPaneAdd" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #83bd73;" />
             <HBox fx:id="gridPaneHome">
                <children>
                   <VBox alignment="TOP_CENTER">
                      <children>
-                        <StackPane prefHeight="825.0" prefWidth="1071.0">
+                        <HBox alignment="TOP_RIGHT" prefHeight="51.0" prefWidth="1071.0" spacing="20.0" style="-fx-background-color: #fafafa;">
                            <children>
-                              <ScrollPane fx:id="scrollPaneSearch" prefHeight="200.0" prefWidth="200.0">
+                              <Button fx:id="buttonMoviesRecently" mnemonicParsing="false" prefHeight="33.0" prefWidth="189.0" text="Danh Sách Phim Vừa Tìm Kiếm">
+                                 <font>
+                                    <Font name="Agency FB" size="16.0" />
+                                 </font>
+                              </Button>
+                              <TextField fx:id="textFieldSearch" alignment="CENTER" prefHeight="25.0" prefWidth="219.0">
+                                 <HBox.margin>
+                                    <Insets top="4.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="Agency FB" size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Button fx:id="buttonSearch" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#onClickSearch" prefHeight="33.0" prefWidth="90.0" text="Search Movie" underline="true">
+                                 <font>
+                                    <Font name="Agency FB" size="16.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="5.0" right="60.0" top="5.0" />
+                           </padding>
+                        </HBox>
+                        <StackPane prefHeight="734.0" prefWidth="1071.0">
+                           <children>
+                              <ScrollPane fx:id="scrollPaneSearch" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF00;">
                                  <content>
                                     <VBox prefHeight="800.0" prefWidth="1069.0">
                                        <children>
-                                          <HBox alignment="TOP_RIGHT" prefHeight="45.0" prefWidth="1069.0">
-                                             <children>
-                                                <TextField fx:id="textFieldSearchSub" alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="221.0">
-                                                   <HBox.margin>
-                                                      <Insets right="16.0" top="14.0" />
-                                                   </HBox.margin>
-                                                   <font>
-                                                      <Font name="Agency FB" size="14.0" />
-                                                   </font></TextField>
-                                                <Button fx:id="buttonSearchSub" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="34.0" prefWidth="94.0" text="Search Movie">
-                                                   <font>
-                                                      <Font name="Agency FB" size="16.0" />
-                                                   </font>
-                                                   <HBox.margin>
-                                                      <Insets right="26.0" top="10.0" />
-                                                   </HBox.margin></Button>
-                                             </children>
-                                             <padding>
-                                                <Insets right="20.0" />
-                                             </padding>
-                                          </HBox>
-                                          <GridPane fx:id="gridLayoutItemSearch" prefHeight="198.0" prefWidth="135.0">
+                                          <GridPane fx:id="gridLayoutItemSearch" prefHeight="731.0" prefWidth="1069.0">
                                             <rowConstraints>
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
@@ -102,30 +109,10 @@
                                     </VBox>
                                  </content>
                               </ScrollPane>
-                              <ScrollPane fx:id="scrollPane" prefHeight="816.0" prefWidth="1071.0">
+                              <ScrollPane fx:id="scrollPane" prefHeight="816.0" prefWidth="1071.0" style="-fx-background-color: #FFFFFF00;">
                                  <content>
                                     <VBox prefHeight="802.0" prefWidth="1070.0">
                                        <children>
-                                          <HBox alignment="TOP_RIGHT" prefHeight="66.0" prefWidth="1020.0" spacing="20.0">
-                                             <children>
-                                                <TextField fx:id="textFieldSearch" alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="219.0">
-                                                   <HBox.margin>
-                                                      <Insets top="4.0" />
-                                                   </HBox.margin>
-                                                   <font>
-                                                      <Font name="Agency FB" size="14.0" />
-                                                   </font>
-                                                </TextField>
-                                                <Button fx:id="buttonSearch" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#onClickSearch" prefHeight="33.0" prefWidth="90.0" text="Search Movie" underline="true">
-                                                   <font>
-                                                      <Font name="Agency FB" size="16.0" />
-                                                   </font>
-                                                </Button>
-                                             </children>
-                                             <VBox.margin>
-                                                <Insets right="50.0" top="10.0" />
-                                             </VBox.margin>
-                                          </HBox>
             
                                            <GridPane fx:id="gridAdapter" prefHeight="262.0" prefWidth="317.0">
                                                <rowConstraints>

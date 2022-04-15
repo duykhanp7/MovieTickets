@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="itemLayout" onMouseClicked="#onClick" prefHeight="100.0" prefWidth="100.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.controller.ItemMovieController">
+<AnchorPane fx:id="itemLayout" onMouseClicked="#onClick" onMouseEntered="#mouseHovered" prefHeight="272.0" prefWidth="111.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.controller.ItemMovieController">
    <children>
-      <VBox prefHeight="270.0" prefWidth="155.0">
+      <VBox prefHeight="272.0" prefWidth="123.0">
          <children>
-            <ImageView fx:id="itemPosterMovie" fitHeight="232.0" fitWidth="196.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../image/temp_image.jpg" />
-               </image>
-            </ImageView>
-            <Label fx:id="itemTitleMovie" alignment="CENTER" prefHeight="38.0" prefWidth="155.0" text="Sonic the Hedgehog 2">
+            <ImageView fx:id="itemPosterMovie" fitHeight="225.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+               <viewport>
+                  <Rectangle2D />
+               </viewport></ImageView>
+            <Label fx:id="itemTitleMovie" alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="150.0" text="Sonic the Hedgehog 2">
                <font>
                   <Font name="Agency FB Bold" size="16.0" />
                </font>
             </Label>
+            <Button fx:id="buyTicketButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickedOnButtonBuyTickets" onMouseEntered="#hoveredOnButtonBuyTickets" onMouseExited="#exitOnButtonBuyTickets" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #e8be74;" text="Buy Tickets">
+               <font>
+                  <Font name="Agency FB" size="14.0" />
+               </font>
+            </Button>
          </children>
       </VBox>
    </children>
