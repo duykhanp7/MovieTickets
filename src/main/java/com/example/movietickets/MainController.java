@@ -3,10 +3,7 @@ package com.example.movietickets;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import com.example.movietickets.controller.ItemMovieController;
 import com.example.movietickets.interf.OnItemClickedListener;
@@ -16,18 +13,17 @@ import com.example.movietickets.utils.Utils;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,11 +37,12 @@ public class MainController implements Initializable, OnItemClickedListener {
     @FXML private Button buttonLogout;
     @FXML Button buttonMoviesRecently;
 
-    @FXML HBox gridPaneHome;
+    @FXML HBox PaneHome;
+    @FXML VBox loadingPane;
 
-    @FXML Pane gridPaneAdd;
-    @FXML Pane gridPaneMovieScreens;
-    @FXML Pane gridPaneLogOut;
+    @FXML Pane PaneAdd;
+    @FXML Pane PaneMovieScreens;
+    @FXML Pane PaneLogOut;
 
     @FXML GridPane gridAdapter;
     @FXML GridPane gridLayoutItemSearch;
@@ -56,41 +53,53 @@ public class MainController implements Initializable, OnItemClickedListener {
     @FXML Button buttonSearch;
     @FXML TextField textFieldSearch;
 
+    //
     String oldKeyword="";
-//    @FXML Button buttonSearchSub;
-//    @FXML TextField textFieldSearchSub;
+    //DANH SÁCH CÁC PHIM ĐÃ BÁN GẦN ĐÂY
+    //CHỈ THÊM VÀO MỖI KHI PHIM NÀY ĐƯỢC BÁN
+    //DÙNG HASHTABLE ĐỂ TRÁNH INSERT CÁC PHẦN TỬ TRÙNG
+    //KEY : LÀ ID CỦA BỘ PHIM ĐÓ, VALUES CHÍNH LÀ BỘ PHIM ĐÓ
+    Map<String, MovieObject.Movie> moviesSoldRecently = new HashMap<>();
 
     //DANH SÁCH PHIM PHỔ BIẾN
     List<MovieObject> popularMovies = new ArrayList<>();
 
-    int column = 0;
-    int row = 2;
+    //BẢNG TÌM KIẾM
     int columnSearch = 0;
     int rowSearch = 1;
+    int pageSearch = 1;
+    int maxPageSearch = 0;
 
+    //BẢNG HIỂN PHIM CHÍNH
+    int column = 0;
+    int row = 2;
     int pageMain = 0;
     int maxPageMain = 0;
-    int pageSearch = 0;
-    int maxPageSearch = 0;
+
+    //CONTROLLER DANH SÁCH VÉ PHIM BÁN GẦN ĐÂY
+    MovieSoldRecentlyController movieSoldRecentlyController;
+    Stage stageMoviesRecently;
+    Scene sceneMoviesRecently;
+
 
     public MainController() {}
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //LẤY DANH SÁCH PHIM PHỔ BIẾN TỪ API TRẢ VỀ
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    getDataFromAPI(1);
-                }
-                catch (Exception exception){
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Connection error, please check the network again");
-                }
-            }
-        }).start();
+        loadingPane.toFront();
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        loadingPane.getChildren().add(progressIndicator);
 
+        try {
+            getDataFromAPI(1);
+        }
+        catch (Exception exception){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Connection error, please check the network again");
+        }
+
+        InitStageMoviesRecently();
 
         this.stateButtonClicked[0] = true;
         this.buttonHome.setStyle("");
@@ -102,13 +111,11 @@ public class MainController implements Initializable, OnItemClickedListener {
         scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
-                System.out.println("NEW OLD : "+oldValue+" -- "+newValue);
                 if(newValue.equals(1.0)){
-                    System.out.println("SCROLL TO END");
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            if(pageMain <= maxPageMain){
+                            if(pageMain < maxPageMain){
                                 try {
                                     getDataFromAPI(++pageMain);
                                 }
@@ -124,22 +131,23 @@ public class MainController implements Initializable, OnItemClickedListener {
             }
         });
 
-        //SCROLL PANE SHOW MOVIE SEARCH BY TITLE
+        //SCROLL PANEL HIỂ THỊ DANH SÁCH PHIM TÌM KIẾM THEO TÊN
         scrollPaneSearch.vvalueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newValue) {
                 if(newValue.equals(1.0)){
-                    System.out.println("SCROLL TO END");
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            if(pageSearch <= maxPageSearch){
+                            if(pageSearch < maxPageSearch){
                                 String text = textFieldSearch.getText().trim().toString();
                                 if(!text.isEmpty()){
                                     //BẮT ĐẦU LẤY DỮ LIỆU
                                     //NẾU LỖI THÌ SẼ THÔNG BÁO TRONG CATCH
                                     try {
-                                        InitLayoutContainMoviesResult(text,++pageSearch);
+                                        if(pageSearch < maxPageSearch){
+                                            InitLayoutContainMoviesResult(text,++pageSearch);
+                                        }
                                     }
                                     catch (Exception e){
                                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -153,6 +161,7 @@ public class MainController implements Initializable, OnItemClickedListener {
                 }
             }
         });
+
 
 
     }
@@ -202,20 +211,16 @@ public class MainController implements Initializable, OnItemClickedListener {
     @FXML
     private void onButtonClicked(ActionEvent actionEvent) {
         if (actionEvent.getSource() == this.buttonHome) {
-            this.gridPaneHome.toFront();
+            this.PaneHome.toFront();
             scrollPane.toFront();
-            System.out.println("BUTTON HOME CLICKED");
         } else if (actionEvent.getSource() == this.buttonAdd) {
-            this.gridPaneAdd.toFront();
-            System.out.println("BUTTON ADD CLICKED");
+            this.PaneAdd.toFront();
         } else if (actionEvent.getSource() == this.buttonMovieScreens) {
-            this.gridPaneMovieScreens.toFront();
-            System.out.println("BUTTON MOVIE SCREENS CLICKED");
+            this.PaneMovieScreens.toFront();
         } else if (actionEvent.getSource() == this.buttonLogout) {
-            this.gridPaneLogOut.toFront();
-            System.out.println("BUTTON LOG OUT CLICKED");
+            this.PaneLogOut.toFront();
         } else {
-            System.out.println("NHU CCCCCCCCCCCCCc");
+            //NULL
         }
 
     }
@@ -252,72 +257,71 @@ public class MainController implements Initializable, OnItemClickedListener {
         API.api.getMoviesPopular(Utils.API_KEY,String.valueOf(page)).enqueue(new Callback<MovieObject>() {
             @Override
             public void onResponse(Call<MovieObject> call, Response<MovieObject> response) {
-                System.out.println("ON SUCCESSFULLY");
                 //NẾU DỮ LIỆU TRẢ VỀ KHÔNG NULL THÌ UP DATA LÊN VIEWS
                 if(response.body().getMovies().size() > 0){
                     popularMovies.add(response.body());
-                    System.out.println("NOT NULL : "+response.body().movies.size());
                     MovieObject movieObject = response.body();
                     maxPageMain = Integer.parseInt(movieObject.getTotal_pages());
-                    try {
-                        for (int i = 0; i < movieObject.getMovies().size(); i++) {
-                            MovieObject.Movie item = movieObject.getMovies().get(i);
-
-                            System.out.println("ITEM GET IS : "+item.getId()+" -- "+item.getTitle());
-
-                            FXMLLoader loader = new FXMLLoader();
-                            loader.setLocation(getClass().getResource("view/item_movie.fxml"));
-                            AnchorPane anchorPane = null;
-                            try {
-                                anchorPane = loader.load();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            //ĐƯA DỮ LIỆU VÀO VIEW
-                            ItemMovieController itemController = loader.getController();
-                            itemController.setData(item,MainController.this);
-
-                            //LAYOUT ITEM
-                            AnchorPane finalAnchorPane = anchorPane;
-
-                            //CHO CHẠY TRONG HÀM RUN LATER ĐỂ TRÁNH CRASH LUỒNG CHÍNH
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    //NẾU ĐỦ 6 ITEMS TRÊN 1 HÀNG THÌ
-                                    //CHUYỂN SANG HÀNG TIẾP THEO
-                                    if (column == 6) {
-                                        column = 0;
-                                        row++;
-                                    }
-
-                                    gridAdapter.add(finalAnchorPane, column++, row); //(child,column,row)
-                                    //set grid width
-                                    gridAdapter.setMinWidth(Region.USE_COMPUTED_SIZE);
-                                    gridAdapter.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                                    gridAdapter.setMaxWidth(Region.USE_PREF_SIZE);
-
-                                    //set grid height
-                                    gridAdapter.setMinHeight(Region.USE_COMPUTED_SIZE);
-                                    gridAdapter.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                                    gridAdapter.setMaxHeight(Region.USE_PREF_SIZE);
-                                }
-                            });
-
-                            GridPane.setMargin(anchorPane, new Insets(10,0,20,20));
+                    for (int i = 0; i < movieObject.getMovies().size(); i++) {
+                        MovieObject.Movie item = movieObject.getMovies().get(i);
+                        FXMLLoader loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("view/item_movie.fxml"));
+                        AnchorPane anchorPane = null;
+                        try {
+                            anchorPane = loader.load();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+
+                        //ĐƯA DỮ LIỆU VÀO VIEW
+                        ItemMovieController itemController = loader.getController();
+                        itemController.setData(item,MainController.this);
+
+                        //LAYOUT ITEM
+                        AnchorPane finalAnchorPane = anchorPane;
+
+                        //CHO CHẠY TRONG HÀM RUN LATER ĐỂ TRÁNH CRASH LUỒNG CHÍNH
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //NẾU ĐỦ 6 ITEMS TRÊN 1 HÀNG THÌ
+                                //CHUYỂN SANG HÀNG TIẾP THEO
+                                if (column == 6) {
+                                    column = 0;
+                                    row++;
+                                }
+
+                                gridAdapter.add(finalAnchorPane, column++, row); //(child,column,row)
+                            }
+                        });
+                        //set grid width
+                        gridAdapter.setMinWidth(Region.USE_COMPUTED_SIZE);
+                        gridAdapter.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        gridAdapter.setMaxWidth(Region.USE_PREF_SIZE);
+
+                        //set grid height
+                        gridAdapter.setMinHeight(Region.USE_COMPUTED_SIZE);
+                        gridAdapter.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                        gridAdapter.setMaxHeight(Region.USE_PREF_SIZE);
+
+                        GridPane.setMargin(anchorPane, new Insets(10,0,20,20));
                     }
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("GET SUCCESSFULLY");
+                            loadingPane.toBack();
+                            PaneHome.toFront();
+                        }
+                    });
                 }
                 //NẾU NULL THÌ GỌI LẠI API LẤY DỮ LIỆU CỦA PAGE KHÁC ĐỔ VỀ
                 else{
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            if(pageMain <= maxPageMain){
+                            if(pageMain < maxPageMain){
                                 try {
                                     getDataFromAPI(++pageMain);
                                 }
@@ -334,7 +338,7 @@ public class MainController implements Initializable, OnItemClickedListener {
 
             @Override
             public void onFailure(Call<MovieObject> call, Throwable throwable) {
-                System.out.println("ON FAILED CONNECT TO SERVER");
+
             }
         });
     }
@@ -343,7 +347,25 @@ public class MainController implements Initializable, OnItemClickedListener {
     //KHI MỖI ITEM PHIM ĐƯỢC NHẤN THÌ SẼ NHẢY VÀO FUNCTION NÀY
     @Override
     public void onClicked(MovieObject.Movie item) {
-        System.out.println("ITEM CLICKED IS : "+item.getId()+" -- "+item.getTitle());
+
+    }
+
+    @Override
+    public void onButtonBuyClicked(MovieObject.Movie item) {
+        if(!moviesSoldRecently.containsKey(item.getId())){
+            System.out.println("ADD SUCCESSFULLY");
+            moviesSoldRecently.put(item.getId(),item);
+            System.out.println("ITEM BUY : "+item.getId()+" -- "+item.getTitle());
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    movieSoldRecentlyController.addNewItem(item);
+                }
+            });
+        }
+        else{
+            System.out.println("ADD FAILED");
+        }
     }
 
 
@@ -352,14 +374,16 @@ public class MainController implements Initializable, OnItemClickedListener {
     @FXML
     public void onClickSearch(ActionEvent actionEvent){
         if(actionEvent.getSource() == buttonSearch){
+            System.out.println("BUTTON SEARCH");
             String keyword = textFieldSearch.getText().trim().toString().toLowerCase();
-
             //NẾU KEYWORD MỚI VÀ CŨ TRÙNG NHAU THÌ KHÔNG CẦN LOAD LẠI
             if(!oldKeyword.equals(keyword)){
+                loadingPane.toFront();
+                System.out.println("DIFFERENT KEYWORD");
                 oldKeyword = keyword;
                 if(!keyword.isEmpty()){
-                    System.out.println("KEYWORD NOT EMPTY");
-                    pageSearch = 0;
+                    System.out.println("NOT NULLLLLLLL KEYWORD");
+                    pageSearch = 1;
                     columnSearch = 0;
                     rowSearch = 1;
                     if(gridLayoutItemSearch.getChildren().size() > 0){
@@ -367,13 +391,16 @@ public class MainController implements Initializable, OnItemClickedListener {
                     }
                     //BẮT ĐẦU LẤY DỮ LIỆU TỪ API
                     try {
-                        InitLayoutContainMoviesResult(keyword,++pageSearch);
+                        InitLayoutContainMoviesResult(keyword,pageSearch);
                     }
                     catch (Exception e){
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText("Connection error, please check the network again");
                     }
+                }
+                else{
+                    System.out.println("NULLLLLLLLLLLLLLLLLLLL");
                 }
             }
             if(!keyword.trim().isEmpty()){
@@ -388,67 +415,65 @@ public class MainController implements Initializable, OnItemClickedListener {
         API.api.getMoviesByKeyword(Utils.API_KEY,keyword,String.valueOf(page)).enqueue(new Callback<MovieObject>() {
             @Override
             public void onResponse(Call<MovieObject> call, Response<MovieObject> response) {
-
+                System.out.println("PAGE SEARCH : "+page);
                 if(response.body().getMovies().size() > 0){
-                    System.out.println("NOT NULL : "+response.body().movies.size());
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadingPane.toBack();
+                        }
+                    });
                     MovieObject movieObject = response.body();
                     maxPageSearch = Integer.parseInt(movieObject.getTotal_pages());
-                    try {
-                        for (int i = 0; i < movieObject.getMovies().size(); i++) {
-                            MovieObject.Movie item = movieObject.getMovies().get(i);
+                    for (int i = 0; i < movieObject.getMovies().size(); i++) {
+                        MovieObject.Movie item = movieObject.getMovies().get(i);
 
-                            System.out.println("ITEM GET IS : "+item.getId()+" -- "+item.getPoster_path());
-
-                            FXMLLoader loader = new FXMLLoader();
-                            loader.setLocation(getClass().getResource("view/item_movie.fxml"));
-                            AnchorPane anchorPane = null;
-                            try {
-                                anchorPane = loader.load();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            //ĐƯA DỮ LIỆU VÀO VIEW
-                            ItemMovieController itemController = loader.getController();
-                            itemController.setData(item,MainController.this);
-
-                            //LAYOUT ITEM
-                            AnchorPane finalAnchorPane = anchorPane;
-
-                            //CHO CHẠY TRONG HÀM RUN LATER ĐỂ TRÁNH CRASH LUỒNG CHÍNH
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    //NẾU ĐỦ 6 ITEMS TRÊN 1 HÀNG THÌ
-                                    //CHUYỂN SANG HÀNG TIẾP THEO
-                                    if (columnSearch == 6) {
-                                        columnSearch = 0;
-                                        rowSearch++;
-                                    }
-                                    gridLayoutItemSearch.add(finalAnchorPane, columnSearch++, rowSearch); //(child,column,row)
-                                    //set grid width
-                                    gridLayoutItemSearch.setMinWidth(Region.USE_COMPUTED_SIZE);
-                                    gridLayoutItemSearch.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                                    gridLayoutItemSearch.setMaxWidth(Region.USE_PREF_SIZE);
-
-                                    //set grid height
-                                    gridLayoutItemSearch.setMinHeight(Region.USE_COMPUTED_SIZE);
-                                    gridLayoutItemSearch.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                                    gridLayoutItemSearch.setMaxHeight(Region.USE_PREF_SIZE);
-                                }
-                            });
-
-                            GridPane.setMargin(anchorPane,new Insets(10,0,10,10));
+                        FXMLLoader loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("view/item_movie.fxml"));
+                        AnchorPane anchorPane = null;
+                        try {
+                            anchorPane = loader.load();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+
+                        //ĐƯA DỮ LIỆU VÀO VIEW
+                        ItemMovieController itemController = loader.getController();
+                        itemController.setData(item, MainController.this);
+
+                        //LAYOUT ITEM
+                        AnchorPane finalAnchorPane = anchorPane;
+
+                        //CHO CHẠY TRONG HÀM RUN LATER ĐỂ TRÁNH CRASH LUỒNG CHÍNH
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //NẾU ĐỦ 6 ITEMS TRÊN 1 HÀNG THÌ
+                                //CHUYỂN SANG HÀNG TIẾP THEO
+                                if (columnSearch == 6) {
+                                    columnSearch = 0;
+                                    rowSearch++;
+                                }
+                                gridLayoutItemSearch.add(finalAnchorPane, columnSearch++, rowSearch); //(child,column,row)
+                                //set grid width
+                            }
+                        });
+
+                        gridLayoutItemSearch.setMinWidth(Region.USE_COMPUTED_SIZE);
+                        gridLayoutItemSearch.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        gridLayoutItemSearch.setMaxWidth(Region.USE_PREF_SIZE);
+
+                        //set grid height
+                        gridLayoutItemSearch.setMinHeight(Region.USE_COMPUTED_SIZE);
+                        gridLayoutItemSearch.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                        gridLayoutItemSearch.setMaxHeight(Region.USE_PREF_SIZE);
+                        GridPane.setMargin(anchorPane, new Insets(10, 0, 10, 10));
                     }
                 }
                 else{
                     pageSearch = 1;
                     maxPageSearch = 0;
-                    System.out.println("PAGE IS : "+pageSearch+" -- "+maxPageSearch+" -- "+keyword);
                     //HIỂN THỊ THÔNG BÁO KHÔNG CÓ KẾT QUẢ NÀO TRÙNG KHỚP VỚI KEYWORD ĐÃ NHẬP
                     Platform.runLater(new Runnable() {
                         @Override
@@ -464,9 +489,48 @@ public class MainController implements Initializable, OnItemClickedListener {
 
             @Override
             public void onFailure(Call<MovieObject> call, Throwable throwable) {
-                System.out.println("ON GET MOVIES BY TITLE FAILED");
+
             }
         });
     }
 
+
+    //HIỂN THỊ DANH SÁCH CÁC PHIM TÌM KIẾM GẦN ĐÂY
+    @FXML
+    public void showMoviesTicketsSoldRecently(ActionEvent actionEvent){
+        stageMoviesRecently.show();
+    }
+
+    //KHỞI TẠO VIEWS DANH SÁCH VÉ PHIM BÁN GẦN ĐÂY
+    public void InitStageMoviesRecently(){
+        stageMoviesRecently = new Stage();
+        stageMoviesRecently.setResizable(false);
+        stageMoviesRecently.setTitle("Recently Sold Movie Tickets");
+        //CHẶN VIỆC CLOSE PARENT STAGE CHO ĐẾN KHI CHILDREN STAGE CLOSED
+        stageMoviesRecently.initModality(Modality.APPLICATION_MODAL);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("view/movie_sold_recently.fxml"));
+        try {
+            sceneMoviesRecently = new Scene(loader.load(),850,650);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        movieSoldRecentlyController = loader.getController();
+        movieSoldRecentlyController.setOnItemClickedListener(this);
+        movieSoldRecentlyController.setMovies(getMoviesSoldRecently());
+        stageMoviesRecently.setScene(sceneMoviesRecently);
+    }
+
+
+    //TRẢ VỀ DANH SÁCH VÉ PHIM BÁN GẦN ĐÂY TỪ HASHTABLE
+    public List<MovieObject.Movie> getMoviesSoldRecently(){
+        if(moviesSoldRecently.size() > 0){
+            List<MovieObject.Movie> list = new ArrayList<>();
+            for (String key : moviesSoldRecently.keySet()){
+                list.add(moviesSoldRecently.get(key));
+            }
+            return list;
+        }
+        return null;
+    }
 }

@@ -50,18 +50,22 @@ public class ItemMovieController {
         onItemClickedListener.onClicked(movie);
     }
 
+    //SET EVENT CHO BUTTON MUA VÉ
+    @FXML
+    public void onButtonBuyTicketClicked(MouseEvent mouseEvent){
+        onItemClickedListener.onButtonBuyClicked(movie);
+        buyTicketButton.setStyle("-fx-background-color: #fa9805");
+    }
+
     //HIỂN THỊ TOOLTIP SHOW TÊN CỦA BỘ PHIM ĐƯỢC HOVERED
     @FXML
     public void mouseHovered(MouseEvent mouseEvent){
         Tooltip tooltip = new Tooltip(movie.getTitle());
         Tooltip.install(itemLayout,tooltip);
-        System.out.println("MOUSE HOVEREDDDDDDDDDDDDDDDDD");
     }
 
     @FXML
-    public void mouseGone(MouseEvent mouseEvent){
-        System.out.println("MOUSE GONEEEEEEEEEEEEEEEEEEEE");
-    }
+    public void mouseGone(MouseEvent mouseEvent){}
 
     //THAY ĐỔI BACKGROUND BUTTON "BUY TICKETS" KHI ĐƯỢC HOVERED VÀ NHẤN 2 MÀU KHÁC NHAU
     //HOVERED : MÀU NHẠT HƠN MÀU BACKGOUND DEFAULT
@@ -81,7 +85,7 @@ public class ItemMovieController {
     //EXIT
     @FXML
     public void exitOnButtonBuyTickets(MouseEvent mouseEvent){
-        buyTicketButton.setStyle("-fx-background-color: #e6ae5c");
+        buyTicketButton.setStyle("-fx-background-color: #d98609");
     }
 
 }

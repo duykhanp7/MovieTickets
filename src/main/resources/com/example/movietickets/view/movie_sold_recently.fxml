@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="layoutMoviesSoldRecently" maxHeight="650.0" maxWidth="850.0" minHeight="650.0" minWidth="850.0" prefHeight="650.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.MovieSoldRecentlyController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="708.0" prefWidth="887.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="887.0" text="List of recently sold movie tickets" underline="true">
+               <font>
+                  <Font name="Agency FB" size="25.0" />
+               </font>
+            </Label>
+            <ScrollPane prefHeight="670.0" prefWidth="887.0">
+               <content>
+                  <GridPane fx:id="gridLayoutMoviesSoldRecently" alignment="CENTER" prefHeight="669.0" prefWidth="756.0">
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+               </content>
+               <padding>
+                  <Insets bottom="80.0" />
+               </padding>
+            </ScrollPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -19,7 +19,7 @@
                   <Font name="Agency FB Bold" size="16.0" />
                </font>
             </Label>
-            <Button fx:id="buyTicketButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickedOnButtonBuyTickets" onMouseEntered="#hoveredOnButtonBuyTickets" onMouseExited="#exitOnButtonBuyTickets" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #e8be74;" text="Buy Tickets">
+            <Button fx:id="buyTicketButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#onButtonBuyTicketClicked" onMouseEntered="#hoveredOnButtonBuyTickets" onMouseExited="#exitOnButtonBuyTickets" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #d98609;" text="Buy Tickets">
                <font>
                   <Font name="Agency FB" size="14.0" />
                </font>

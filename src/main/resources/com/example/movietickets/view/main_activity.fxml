@@ -59,26 +59,35 @@
             </children></AnchorPane>
         <StackPane prefHeight="801.0" prefWidth="1113.0">
             <children>
-                <Pane fx:id="gridPaneMovieScreens" style="-fx-background-color: #8f968d;" />
-                <Pane fx:id="gridPaneLogOut" style="-fx-background-color: #1f5411#1f5411;" />
-                <Pane fx:id="gridPaneAdd" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #83bd73;" />
-            <HBox fx:id="gridPaneHome">
+            <VBox fx:id="loadingPane" alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="77.0" prefWidth="1071.0" text="DỮ LIỆU ĐANG ĐƯỢC TẢI, QUÝ KHÁCH VUI LÒNG CHỜ CHÚT......" textFill="#ee0202">
+                     <font>
+                        <Font name="Agency FB" size="25.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+                <Pane fx:id="PaneLogOut" style="-fx-background-color: #1f5411#1f5411;" />
+                <Pane fx:id="PaneAdd" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #83bd73;" />
+                <Pane fx:id="PaneMovieScreens" style="-fx-background-color: #8f968d;" />
+            <HBox fx:id="PaneHome">
                <children>
                   <VBox alignment="TOP_CENTER">
                      <children>
                         <HBox alignment="TOP_RIGHT" prefHeight="51.0" prefWidth="1071.0" spacing="20.0" style="-fx-background-color: #fafafa;">
                            <children>
-                              <Button fx:id="buttonMoviesRecently" mnemonicParsing="false" prefHeight="33.0" prefWidth="189.0" text="Danh Sách Phim Vừa Tìm Kiếm">
+                              <Button fx:id="buttonMoviesRecently" mnemonicParsing="false" onAction="#showMoviesTicketsSoldRecently" prefHeight="33.0" prefWidth="189.0" text="Danh Sách Phim Gần Đây" underline="true">
                                  <font>
                                     <Font name="Agency FB" size="16.0" />
                                  </font>
                               </Button>
-                              <TextField fx:id="textFieldSearch" alignment="CENTER" prefHeight="25.0" prefWidth="219.0">
+                              <TextField fx:id="textFieldSearch" alignment="CENTER" prefHeight="48.0" prefWidth="219.0">
                                  <HBox.margin>
-                                    <Insets top="4.0" />
+                                    <Insets bottom="5.0" />
                                  </HBox.margin>
                                  <font>
-                                    <Font name="Agency FB" size="14.0" />
+                                    <Font name="Agency FB" size="16.0" />
                                  </font>
                               </TextField>
                               <Button fx:id="buttonSearch" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#onClickSearch" prefHeight="33.0" prefWidth="90.0" text="Search Movie" underline="true">
@@ -94,7 +103,7 @@
                               <Insets bottom="5.0" right="60.0" top="5.0" />
                            </padding>
                         </HBox>
-                        <StackPane prefHeight="734.0" prefWidth="1071.0">
+                        <StackPane prefHeight="779.0" prefWidth="1071.0">
                            <children>
                               <ScrollPane fx:id="scrollPaneSearch" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF00;">
                                  <content>
@@ -109,9 +118,9 @@
                                     </VBox>
                                  </content>
                               </ScrollPane>
-                              <ScrollPane fx:id="scrollPane" prefHeight="816.0" prefWidth="1071.0" style="-fx-background-color: #FFFFFF00;">
+                              <ScrollPane fx:id="scrollPane" prefHeight="760.0" prefWidth="1071.0" style="-fx-background-color: #FFFFFF00;">
                                  <content>
-                                    <VBox prefHeight="802.0" prefWidth="1070.0">
+                                    <VBox prefHeight="802.0" prefWidth="1071.0">
                                        <children>
             
                                            <GridPane fx:id="gridAdapter" prefHeight="262.0" prefWidth="317.0">
