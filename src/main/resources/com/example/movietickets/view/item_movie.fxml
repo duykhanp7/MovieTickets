@@ -14,7 +14,7 @@
                <viewport>
                   <Rectangle2D />
                </viewport></ImageView>
-            <Label fx:id="itemTitleMovie" alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="150.0" text="Sonic the Hedgehog 2">
+            <Label fx:id="itemTitleMovie" alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="150.0">
                <font>
                   <Font name="Agency FB Bold" size="16.0" />
                </font>

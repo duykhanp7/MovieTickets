@@ -34,13 +34,20 @@ public class ItemMovieController {
     public void setData(MovieObject.Movie item,OnItemClickedListener onItemClickedListenerTemp){
         movie = item;
         onItemClickedListener = onItemClickedListenerTemp;
-        if(item.getPoster_path() != null){
-            itemPosterMovie.setImage(new Image(Utils.path_image_domain.trim()+item.getPoster_path().trim()));
-        }
-        else{
-            //CREATE A IMAGE WITH BACKGROUND COLOR IS BROWN TO SET WHEN POSTER PATH IS NULL
-        }
-        itemTitleMovie.setText(item.getTitle().trim());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                itemTitleMovie.setText(item.getTitle().trim());
+            }
+        });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(item.getPoster_path() != null){
+                    itemPosterMovie.setImage(new Image(Utils.path_image_domain.trim()+item.getPoster_path().trim()));
+                }
+            }
+        }).start();
     }
 
 

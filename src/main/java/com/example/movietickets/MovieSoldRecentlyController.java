@@ -109,12 +109,13 @@ public class MovieSoldRecentlyController implements Initializable {
 
         //ĐƯA DỮ LIỆU VÀO VIEW
         ItemMovieController itemController = loader.getController();
-        Platform.runLater(new Runnable() {
+
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 itemController.setData(item, onItemClickedListener);
             }
-        });
+        }).start();
 
         //LAYOUT ITEM
         AnchorPane finalAnchorPane = anchorPane;

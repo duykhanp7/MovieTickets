@@ -20,6 +20,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
@@ -275,7 +277,12 @@ public class MainController implements Initializable, OnItemClickedListener {
 
                         //ĐƯA DỮ LIỆU VÀO VIEW
                         ItemMovieController itemController = loader.getController();
-                        itemController.setData(item,MainController.this);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                itemController.setData(item,MainController.this);
+                            }
+                        }).start();
 
                         //LAYOUT ITEM
                         AnchorPane finalAnchorPane = anchorPane;
@@ -373,43 +380,53 @@ public class MainController implements Initializable, OnItemClickedListener {
     //NẾU RỖNG THÌ KHÔNG CHUYỂN LAYOUT, NGƯỢC LẠI THÌ CHUYỂN
     @FXML
     public void onClickSearch(ActionEvent actionEvent){
-        if(actionEvent.getSource() == buttonSearch){
-            System.out.println("BUTTON SEARCH");
-            String keyword = textFieldSearch.getText().trim().toString().toLowerCase();
-            //NẾU KEYWORD MỚI VÀ CŨ TRÙNG NHAU THÌ KHÔNG CẦN LOAD LẠI
-            if(!oldKeyword.equals(keyword)){
-                loadingPane.toFront();
-                System.out.println("DIFFERENT KEYWORD");
-                oldKeyword = keyword;
-                if(!keyword.isEmpty()){
-                    System.out.println("NOT NULLLLLLLL KEYWORD");
-                    pageSearch = 1;
-                    columnSearch = 0;
-                    rowSearch = 1;
-                    if(gridLayoutItemSearch.getChildren().size() > 0){
-                        gridLayoutItemSearch.getChildren().clear();
-                    }
-                    //BẮT ĐẦU LẤY DỮ LIỆU TỪ API
-                    try {
-                        InitLayoutContainMoviesResult(keyword,pageSearch);
-                    }
-                    catch (Exception e){
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Connection error, please check the network again");
-                    }
-                }
-                else{
-                    System.out.println("NULLLLLLLLLLLLLLLLLLLL");
-                }
-            }
-            if(!keyword.trim().isEmpty()){
-                scrollPaneSearch.toFront();
-            }
-        }
+        SearchMovie();
     }
 
 
+    //BẮT EVENT ENTER TRÊN TEXT FIELD FIND FILM BY TITLE
+    public void onEnterPressed(KeyEvent keyEvent){
+        if(keyEvent.getCode() == KeyCode.ENTER){
+            System.out.println("ENTER PRESSED ON TEXTFIELD");
+            SearchMovie();
+        }
+    }
+
+    public synchronized void SearchMovie(){
+        System.out.println("BUTTON SEARCH");
+        String keyword = textFieldSearch.getText().trim().toString().toLowerCase();
+        //NẾU KEYWORD MỚI VÀ CŨ TRÙNG NHAU THÌ KHÔNG CẦN LOAD LẠI
+        if(!oldKeyword.equals(keyword)){
+            loadingPane.toFront();
+            System.out.println("DIFFERENT KEYWORD");
+            oldKeyword = keyword;
+            if(!keyword.isEmpty()){
+                System.out.println("NOT NULLLLLLLL KEYWORD");
+                pageSearch = 1;
+                columnSearch = 0;
+                rowSearch = 1;
+                if(gridLayoutItemSearch.getChildren().size() > 0){
+                    gridLayoutItemSearch.getChildren().clear();
+                }
+                //BẮT ĐẦU LẤY DỮ LIỆU TỪ API
+                try {
+                    InitLayoutContainMoviesResult(keyword,pageSearch);
+                }
+                catch (Exception e){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Connection error, please check the network again");
+                }
+            }
+            else{
+                System.out.println("NULLLLLLLLLLLLLLLLLLLL");
+            }
+        }
+        if(!keyword.trim().isEmpty()){
+            scrollPaneSearch.toFront();
+        }
+
+    }
     //LẤY DANH SÁCH PHIM DỰA THEO TÊN PHIM
     public synchronized void InitLayoutContainMoviesResult(String keyword,int page){
         API.api.getMoviesByKeyword(Utils.API_KEY,keyword,String.valueOf(page)).enqueue(new Callback<MovieObject>() {
@@ -439,7 +456,12 @@ public class MainController implements Initializable, OnItemClickedListener {
 
                         //ĐƯA DỮ LIỆU VÀO VIEW
                         ItemMovieController itemController = loader.getController();
-                        itemController.setData(item, MainController.this);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                itemController.setData(item, MainController.this);
+                            }
+                        }).start();
 
                         //LAYOUT ITEM
                         AnchorPane finalAnchorPane = anchorPane;
@@ -468,10 +490,16 @@ public class MainController implements Initializable, OnItemClickedListener {
                         gridLayoutItemSearch.setMinHeight(Region.USE_COMPUTED_SIZE);
                         gridLayoutItemSearch.setPrefHeight(Region.USE_COMPUTED_SIZE);
                         gridLayoutItemSearch.setMaxHeight(Region.USE_PREF_SIZE);
-                        GridPane.setMargin(anchorPane, new Insets(10, 0, 10, 10));
+                        GridPane.setMargin(anchorPane, new Insets(10, 0, 10, 20));
                     }
                 }
                 else{
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadingPane.toBack();
+                        }
+                    });
                     pageSearch = 1;
                     maxPageSearch = 0;
                     //HIỂN THỊ THÔNG BÁO KHÔNG CÓ KẾT QUẢ NÀO TRÙNG KHỚP VỚI KEYWORD ĐÃ NHẬP

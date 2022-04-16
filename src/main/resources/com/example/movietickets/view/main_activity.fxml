@@ -61,7 +61,7 @@
             <children>
             <VBox fx:id="loadingPane" alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="77.0" prefWidth="1071.0" text="DỮ LIỆU ĐANG ĐƯỢC TẢI, QUÝ KHÁCH VUI LÒNG CHỜ CHÚT......" textFill="#ee0202">
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="77.0" prefWidth="1071.0" text="DỮ LIỆU ĐANG ĐƯỢC TẢI, QUÝ KHÁCH VUI LÒNG CHỜ CHÚT......" textFill="#a85e04">
                      <font>
                         <Font name="Agency FB" size="25.0" />
                      </font>
@@ -77,12 +77,15 @@
                      <children>
                         <HBox alignment="TOP_RIGHT" prefHeight="51.0" prefWidth="1071.0" spacing="20.0" style="-fx-background-color: #fafafa;">
                            <children>
-                              <Button fx:id="buttonMoviesRecently" mnemonicParsing="false" onAction="#showMoviesTicketsSoldRecently" prefHeight="33.0" prefWidth="189.0" text="Danh Sách Phim Gần Đây" underline="true">
+                              <Button fx:id="buttonMoviesRecently" mnemonicParsing="false" onAction="#showMoviesTicketsSoldRecently" prefHeight="33.0" prefWidth="189.0" text="Recently Sold Movie Tickets" underline="true">
                                  <font>
                                     <Font name="Agency FB" size="16.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </HBox.margin>
                               </Button>
-                              <TextField fx:id="textFieldSearch" alignment="CENTER" prefHeight="48.0" prefWidth="219.0">
+                              <TextField fx:id="textFieldSearch" alignment="CENTER" onKeyPressed="#onEnterPressed" prefHeight="48.0" prefWidth="219.0">
                                  <HBox.margin>
                                     <Insets bottom="5.0" />
                                  </HBox.margin>
@@ -94,13 +97,16 @@
                                  <font>
                                     <Font name="Agency FB" size="16.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </HBox.margin>
                               </Button>
                            </children>
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                            <padding>
-                              <Insets bottom="5.0" right="60.0" top="5.0" />
+                              <Insets bottom="10.0" right="60.0" top="5.0" />
                            </padding>
                         </HBox>
                         <StackPane prefHeight="779.0" prefWidth="1071.0">
