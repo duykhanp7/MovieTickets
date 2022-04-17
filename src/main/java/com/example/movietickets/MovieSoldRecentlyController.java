@@ -51,46 +51,6 @@ public class MovieSoldRecentlyController implements Initializable {
     public void InitGridView(List<MovieObject.Movie> a){
         for (MovieObject.Movie item : a) {
                 addNewItem(item);
-//            AnchorPane anchorPane = null;
-//            try {
-//                anchorPane = loader.load();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            //ĐƯA DỮ LIỆU VÀO VIEW
-//            ItemMovieController itemController = loader.getController();
-//            itemController.setData(item, onItemClickedListener);
-//
-//            //LAYOUT ITEM
-//            AnchorPane finalAnchorPane = anchorPane;
-//
-//            //CHO CHẠY TRONG HÀM RUN LATER ĐỂ TRÁNH CRASH LUỒNG CHÍNH
-//            Platform.runLater(new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                    //NẾU ĐỦ 6 ITEMS TRÊN 1 HÀNG THÌ
-//                    //CHUYỂN SANG HÀNG TIẾP THEO
-//                    if (column == 5) {
-//                        column = 0;
-//                        row++;
-//                    }
-//
-//                    gridLayoutMoviesSoldRecently.add(finalAnchorPane, column++, row); //(child,column,row)
-//                }
-//            });
-//            //set grid width
-//            gridLayoutMoviesSoldRecently.setMinWidth(Region.USE_COMPUTED_SIZE);
-//            gridLayoutMoviesSoldRecently.setPrefWidth(Region.USE_COMPUTED_SIZE);
-//            gridLayoutMoviesSoldRecently.setMaxWidth(Region.USE_PREF_SIZE);
-//
-//            //set grid height
-//            gridLayoutMoviesSoldRecently.setMinHeight(Region.USE_COMPUTED_SIZE);
-//            gridLayoutMoviesSoldRecently.setPrefHeight(Region.USE_COMPUTED_SIZE);
-//            gridLayoutMoviesSoldRecently.setMaxHeight(Region.USE_PREF_SIZE);
-//
-//            GridPane.setMargin(anchorPane, new Insets(10));
         }
     }
 

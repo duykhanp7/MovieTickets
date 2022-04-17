@@ -64,6 +64,18 @@ public class MovieObject {
         @SerializedName("poster_path")
         public String poster_path;
 
+        @SerializedName("genres")
+        public Genres genres;
+
+        @SerializedName("release_date")
+        public String release_date;
+
+        @SerializedName("runtime")
+        public String runtime;
+
+        @SerializedName("tagline")
+        public String tagline;
+
         public Movie(){}
 
         public String getId() {
@@ -92,6 +104,38 @@ public class MovieObject {
 
         public String getPoster_path() {
             return this.poster_path;
+        }
+
+        public Genres getGenres() {
+            return genres;
+        }
+
+        public void setGenres(Genres genres) {
+            this.genres = genres;
+        }
+
+        public String getRelease_date() {
+            return release_date;
+        }
+
+        public void setRelease_date(String release_date) {
+            this.release_date = release_date;
+        }
+
+        public String getRuntime() {
+            return runtime;
+        }
+
+        public void setRuntime(String runtime) {
+            this.runtime = runtime;
+        }
+
+        public String getTagline() {
+            return tagline;
+        }
+
+        public void setTagline(String tagline) {
+            this.tagline = tagline;
         }
 
         public void setPoster_path(String poster_path) {

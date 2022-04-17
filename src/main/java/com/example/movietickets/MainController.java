@@ -65,6 +65,9 @@ public class MainController implements Initializable, OnItemClickedListener {
 
     //DANH SÁCH PHIM PHỔ BIẾN
     List<MovieObject> popularMovies = new ArrayList<>();
+    Stage stageSellTickets;
+    SoldTicketsController soldTicketsController;
+    Scene sceneSellTickets;
 
     //BẢNG TÌM KIẾM
     int columnSearch = 0;
@@ -102,6 +105,7 @@ public class MainController implements Initializable, OnItemClickedListener {
         }
 
         InitStageMoviesRecently();
+        InitLayoutSellTickets();
 
         this.stateButtonClicked[0] = true;
         this.buttonHome.setStyle("");
@@ -148,7 +152,12 @@ public class MainController implements Initializable, OnItemClickedListener {
                                     //NẾU LỖI THÌ SẼ THÔNG BÁO TRONG CATCH
                                     try {
                                         if(pageSearch < maxPageSearch){
-                                            InitLayoutContainMoviesResult(text,++pageSearch);
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    InitLayoutContainMoviesResult(text,++pageSearch);
+                                                }
+                                            }).start();
                                         }
                                     }
                                     catch (Exception e){
@@ -363,16 +372,17 @@ public class MainController implements Initializable, OnItemClickedListener {
             System.out.println("ADD SUCCESSFULLY");
             moviesSoldRecently.put(item.getId(),item);
             System.out.println("ITEM BUY : "+item.getId()+" -- "+item.getTitle());
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    movieSoldRecentlyController.addNewItem(item);
-                }
-            });
+            //SAU KHI XUẤT VÉ THÀNH CÔNG THÌ MỚI THÊM PHIM VÀO DANH SÁCH BÁN GẦN ĐÂY
+//            Platform.runLater(new Runnable() {
+//                @Override
+//                public void run() {
+//                    movieSoldRecentlyController.addNewItem(item);
+//                }
+//            });
+
         }
-        else{
-            System.out.println("ADD FAILED");
-        }
+        soldTicketsController.setTitle(item.getTitle());
+        stageSellTickets.show();
     }
 
 
@@ -410,7 +420,12 @@ public class MainController implements Initializable, OnItemClickedListener {
                 }
                 //BẮT ĐẦU LẤY DỮ LIỆU TỪ API
                 try {
-                    InitLayoutContainMoviesResult(keyword,pageSearch);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            InitLayoutContainMoviesResult(keyword,pageSearch);
+                        }
+                    }).start();
                 }
                 catch (Exception e){
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -547,6 +562,22 @@ public class MainController implements Initializable, OnItemClickedListener {
         movieSoldRecentlyController.setOnItemClickedListener(this);
         movieSoldRecentlyController.setMovies(getMoviesSoldRecently());
         stageMoviesRecently.setScene(sceneMoviesRecently);
+    }
+
+    public void InitLayoutSellTickets(){
+        stageSellTickets = new Stage();
+        stageSellTickets.setTitle("Sell Tickets");
+        stageSellTickets.initModality(Modality.APPLICATION_MODAL);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("view/layout_sold_tickets.fxml"));
+        sceneSellTickets = null;
+        try {
+            sceneSellTickets = new Scene(loader.load(),1300,600);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        soldTicketsController = loader.getController();
+        stageSellTickets.setScene(sceneSellTickets);
     }
 
 
