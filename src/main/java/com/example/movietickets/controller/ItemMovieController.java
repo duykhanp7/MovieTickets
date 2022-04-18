@@ -17,23 +17,31 @@ import javafx.scene.layout.VBox;
 
 public class ItemMovieController {
 
+    //IMAGEVIEW HIỂN THỊ POSTER CỦA PHIM
     @FXML ImageView itemPosterMovie;
 
+    //LABEL HIỂN THỊ TÊN PHIM
     @FXML Label itemTitleMovie;
 
+    //LAYOUT CHÍNH CHỨA HÌNH ẢNH VÀ TÊN PHIM
     @FXML AnchorPane itemLayout;
 
     @FXML VBox vBoxItem;
 
+    //BUTTON MUA VÉ
     @FXML Button buyTicketButton;
 
 
+    //
     private MovieObject.Movie movie;
+    //OBJECT BẮT SỰ KIỆN MỖI KHI NHẤN VÀO TỪNG BỘ PHIM
     public OnItemClickedListener onItemClickedListener;
 
+    //ĐEM DỮ LIỆU ĐẨY LÊN VIEW - SET HÌNH ẢNH VÀ TÊN PHIM
     public void setData(MovieObject.Movie item,OnItemClickedListener onItemClickedListenerTemp){
         movie = item;
         onItemClickedListener = onItemClickedListenerTemp;
+        //CHO CHẠY LUỒNG RIÊNG TRÁNH ẢNH HƯỞNG ĐẾN LUỒNG CHÍNH
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -51,7 +59,7 @@ public class ItemMovieController {
     }
 
 
-    //SET EVENT CHO MỖI KHI NHẤN VÀO ITEM
+    //SET EVENT CHO MỖI KHI NHẤN VÀO BỘ PHIM
     @FXML
     public void onClick(MouseEvent mouseEvent){
         onItemClickedListener.onClicked(movie);
@@ -64,7 +72,7 @@ public class ItemMovieController {
         buyTicketButton.setStyle("-fx-background-color: #fa9805");
     }
 
-    //HIỂN THỊ TOOLTIP SHOW TÊN CỦA BỘ PHIM ĐƯỢC HOVERED
+    //HIỂN THỊ TOOLTIP SHOW TÊN CỦA BỘ PHIM ĐƯỢC HOVERED1
     @FXML
     public void mouseHovered(MouseEvent mouseEvent){
         Tooltip tooltip = new Tooltip(movie.getTitle());
@@ -77,10 +85,10 @@ public class ItemMovieController {
     //THAY ĐỔI BACKGROUND BUTTON "BUY TICKETS" KHI ĐƯỢC HOVERED VÀ NHẤN 2 MÀU KHÁC NHAU
     //HOVERED : MÀU NHẠT HƠN MÀU BACKGOUND DEFAULT
     //CLICKED : MÀU ĐẬM HƠN BACKGROUND DEFAULT
-    //HOVERED
+    //HOVERED1
     @FXML
     public void hoveredOnButtonBuyTickets(MouseEvent mouseEvent){
-        buyTicketButton.setStyle("-fx-background-color: #e8c78e");
+        buyTicketButton.setStyle("-fx-background-color: #d98e48");
     }
 
     //CLICKED
@@ -89,7 +97,8 @@ public class ItemMovieController {
         buyTicketButton.setStyle("-fx-background-color: #cc7604");
     }
 
-    //EXIT
+    //EXIT1
+    //THAY ĐỔI BACKGROUND CỦA BUTTON MỖI KHI HOVERED TRÊN BỘ PHIM ĐÓ MẤT ĐI
     @FXML
     public void exitOnButtonBuyTickets(MouseEvent mouseEvent){
         buyTicketButton.setStyle("-fx-background-color: #d98609");

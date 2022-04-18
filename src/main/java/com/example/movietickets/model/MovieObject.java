@@ -8,12 +8,13 @@ package com.example.movietickets.model;
 
 
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class MovieObject {
+
+
     @SerializedName("page")
     public String page;
 
@@ -23,8 +24,9 @@ public class MovieObject {
     @SerializedName("results")
     public List<MovieObject.Movie> movies;
 
-    public MovieObject() {
-    }
+
+
+    public MovieObject() {}
 
     public String getPage() {
         return this.page;
@@ -50,29 +52,31 @@ public class MovieObject {
         this.movies = movies;
     }
 
+    //OBJECT PHIM
     public static class Movie {
 
+        //ID CỦA PHIM
         @SerializedName("id")
         public String id;
-
+        //TÊN PHIM
         @SerializedName("title")
         public String title;
-
+        //TÊN GỐC CỦA PHIM
         @SerializedName("original_title")
         public String original_title;
-
+        //ĐƯỜNG DẪN ĐẾN POSTER CỦA PHIM
         @SerializedName("poster_path")
         public String poster_path;
-
+        //THỂ LOẠI CỦA PHIM
         @SerializedName("genres")
-        public Genres genres;
-
+        public List<GenresObject.Genres> genres;
+        //NGÀY RA RẠP
         @SerializedName("release_date")
         public String release_date;
-
+        //THỜI GIAN CHIẾU
         @SerializedName("runtime")
         public String runtime;
-
+        //TAGLINE (KHẨU HIỆU) CỦA PHIM
         @SerializedName("tagline")
         public String tagline;
 
@@ -106,11 +110,11 @@ public class MovieObject {
             return this.poster_path;
         }
 
-        public Genres getGenres() {
+        public List<GenresObject.Genres> getGenres() {
             return genres;
         }
 
-        public void setGenres(Genres genres) {
+        public void setGenres(List<GenresObject.Genres> genres) {
             this.genres = genres;
         }
 

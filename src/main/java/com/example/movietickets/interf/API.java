@@ -2,11 +2,13 @@ package com.example.movietickets.interf;
 
 
 import com.example.movietickets.model.MovieObject;
+import com.example.movietickets.model.TempObject;
 import com.example.movietickets.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface API {
@@ -31,5 +33,11 @@ public interface API {
 
     //LẤY ID, TÊN CÁC THỂ LOẠI PHIM
     //https://api.themoviedb.org/3/genre/movie/list?api_key=904b3059ddd54e71c45dc72502d59375
+
+
+    //https://api.themoviedb.org/3/movie/550?api_key=904b3059ddd54e71c45dc72502d59375
+    //LẤY THỜI GIAN CHIẾU VÀ THỜI GIAN PHIM RA RẠP
+    @GET("/3/movie/{id}")
+    Call<TempObject> getDetailMovie(@Path("id") String id,@Query("api_key") String api_key);
 }
 

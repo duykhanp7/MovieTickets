@@ -3,8 +3,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="25.0" prefWidth="30.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.SeatLayoutItemController">
+<AnchorPane prefHeight="25.0" prefWidth="9.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.SeatLayoutItemController">
    <children>
-      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="34.0" />
+      <HBox prefHeight="25.0" prefWidth="27.0">
+         <children>
+            <Button fx:id="selectSeatButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onButtonSelectSeatClicked" prefHeight="25.0" prefWidth="30.0" style="-fx-background-color: #72d684;" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

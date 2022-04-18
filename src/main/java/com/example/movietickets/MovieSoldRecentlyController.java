@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 
 public class MovieSoldRecentlyController implements Initializable {
 
+    //LAYOUT CHỨA CÁC PHIM BÁN GẦN ĐÂY
     @FXML GridPane gridLayoutMoviesSoldRecently;
 
     int column = 0;
@@ -36,6 +37,7 @@ public class MovieSoldRecentlyController implements Initializable {
 
     }
 
+    //ĐẨY DỮ LIỆU LÊN LAYOUT DANH SÁCH CÁC PHIM BÁN GẦN ĐÂY
     public void setMovies(List<MovieObject.Movie> items){
         if(items != null){
             movies.addAll(items);
@@ -43,6 +45,7 @@ public class MovieSoldRecentlyController implements Initializable {
         }
     }
 
+    //BẮT SỰ KIỆN CLICK TRÊN MỖI PHIM BÁN GẦN ĐÂY
     public void setOnItemClickedListener(OnItemClickedListener itemClickedListener){
         this.onItemClickedListener = itemClickedListener;
     }
@@ -54,6 +57,7 @@ public class MovieSoldRecentlyController implements Initializable {
         }
     }
 
+    //THÊM PHIM VỪA BÁN VÀO DANH SÁCH VỪA BÁN GẦN ĐÂY
     public synchronized void addNewItem(MovieObject.Movie item){
 
         loader = new FXMLLoader();

@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="801.0" prefWidth="1365.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.MainController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="801.0" prefWidth="1365.0" style="-fx-background-color: #e2e879;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.MainController">
     <children>
-        <AnchorPane prefHeight="818.0" prefWidth="294.0">
+        <AnchorPane prefHeight="818.0" prefWidth="294.0" style="-fx-background-color: #e2e879;">
             <children>
                 <VBox prefHeight="801.0" prefWidth="294.0" style="-fx-background-color: #616366;">
                     <children>
@@ -41,7 +41,7 @@
                                 <Font name="Agency FB" size="30.0" />
                             </font>
                         </Button>
-                        <Button fx:id="buttonAdd" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="296.0" style="-fx-background-color: #616366;" text="More" textFill="WHITE">
+                        <Button fx:id="buttonMore" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="296.0" style="-fx-background-color: #616366;" text="More" textFill="WHITE">
                             <font>
                                 <Font name="Agency FB" size="30.0" />
                             </font>
@@ -57,7 +57,7 @@
                             </VBox.margin></Button>
                     </children></VBox>
             </children></AnchorPane>
-        <StackPane prefHeight="801.0" prefWidth="1113.0">
+        <StackPane prefHeight="801.0" prefWidth="1113.0" style="-fx-background-color: #e2e879;">
             <children>
             <VBox fx:id="loadingPane" alignment="CENTER">
                <children>
@@ -75,7 +75,7 @@
                <children>
                   <VBox alignment="TOP_CENTER">
                      <children>
-                        <HBox alignment="TOP_RIGHT" prefHeight="51.0" prefWidth="1071.0" spacing="20.0" style="-fx-background-color: #fafafa;">
+                        <HBox alignment="TOP_RIGHT" prefHeight="51.0" prefWidth="1071.0" spacing="20.0" style="-fx-background-color: #d5d6bf;">
                            <children>
                               <Button fx:id="buttonMoviesRecently" mnemonicParsing="false" onAction="#showMoviesTicketsSoldRecently" prefHeight="33.0" prefWidth="189.0" text="Recently Sold Movie Tickets" underline="true">
                                  <font>
@@ -126,7 +126,7 @@
                               </ScrollPane>
                               <ScrollPane fx:id="scrollPane" prefHeight="760.0" prefWidth="1071.0" style="-fx-background-color: #FFFFFF00;">
                                  <content>
-                                    <VBox prefHeight="802.0" prefWidth="1071.0">
+                                    <VBox prefHeight="802.0" prefWidth="1071.0" style="-fx-background-color: #d5d6bf;">
                                        <children>
             
                                            <GridPane fx:id="gridAdapter" prefHeight="262.0" prefWidth="317.0">
