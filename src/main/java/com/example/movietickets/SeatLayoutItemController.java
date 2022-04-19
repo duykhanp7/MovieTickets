@@ -34,7 +34,7 @@ public class SeatLayoutItemController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        selectSeatButton.setStyle( type.equals(Utils.TYPE_NORMAL) ?  "-fx-background-color:#72d684": type.equals(Utils.TYPE_PRIME) ? "-fx-background-color:#077a33":"-fx-background-color:#c20a04");
+        //selectSeatButton.setStyle( type.equals(Utils.TYPE_NORMAL) ?  "-fx-background-color:#72d684": type.equals(Utils.TYPE_PRIME) ? "-fx-background-color:#077a33":"-fx-background-color:#c20a04");
     }
 
 
@@ -66,6 +66,7 @@ public class SeatLayoutItemController implements Initializable {
         this.type = type;
         //THAY ĐỔI MÀU GHẾ MỖI KHI THAY ĐỔI LOẠI GHẾ
         selectSeatButton.setStyle( type.equals(Utils.TYPE_NORMAL) ? "-fx-background-color:#72d684": type.equals(Utils.TYPE_PRIME) ? "-fx-background-color:#077a33": type.equals(Utils.TYPE_SELECTED) ? "-fx-background-color:#c20a04":"-fx-background-color:#e06b0b");
+        //System.out.println("CHANGE COLOR");
     }
 
     //ĐẶT TÊN GHẾ : E1, E2...

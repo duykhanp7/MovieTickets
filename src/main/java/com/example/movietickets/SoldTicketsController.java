@@ -4,6 +4,7 @@ import com.example.movietickets.interf.OnSeatItemClickedListener;
 import com.example.movietickets.model.GenresObject;
 import com.example.movietickets.model.MovieObject;
 import com.example.movietickets.utils.Utils;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
@@ -60,20 +62,36 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
     @FXML Button button700PM;
     //BUTTON CHỌN KHUNG GIỜ CHIẾU LÚC 9:45PM
     @FXML Button button945PM;
-    //int countSeatsSelected = 0;
     //MAP ĐỂ ĐÁNH DẤU GHẾ NÀO ĐÃ ĐƯỢC CHỌN VÀ GHẾ NÀO CHƯA
     Map<String,String> seatNumberString = new HashMap<>();
     //TỔNG GIÁ VÉ
     int priceTotal = 0;
+    //MAP QUẢN LÝ DỰA VÀO TÊN PHIM VÀ CÁC KHUNG GIỜ CHIẾU;
+    //ID PHIM, KHUNG GIỜ CHIẾU, TÊN GHẾ VÀ CONTROLLER
+    //ID PHIM, KHUNG GIỜ CHIẾU, TÊN GHẾ VÀ LAYOUT
+    Map<String,Map<String,Map<String,Boolean>>> mapParentStateSeat = new HashMap<>();
+    Map<String,Map<String,Map<String,AnchorPane>>> mapParentLayout = new HashMap<>();
+    Map<String,Map<String,Map<String,SeatLayoutItemController>>> mapParentController = new HashMap<>();
 
+    Map<String,Map<String,Boolean>> mapState = new HashMap<>();
+    Map<String,Map<String,AnchorPane>> mapLayout = new HashMap<>();
+    Map<String,Map<String,SeatLayoutItemController>> mapController = new HashMap<>();
     //MỘT HASHMAP ĐỂ ÁNH XẠ TÊN GHẾ VÀ TRẠNG THÁI GHẾ ĐÓ ĐÃ CÓ AI ĐẶT CHƯA
-    Map<String,Boolean> listSeatsSelected = new HashMap<>();
+    //Map<String,Boolean> listSeatsSelected = new HashMap<>();
     //MỘT LIST CHỨA CÁC SEAT CONTROLLER ĐỂ CHỈNH SỬA TYPE MỖI KHI ẤN NÚT BOOK TICKETS
     //MỖI KHI ĐỒNG Ý ĐẶT VÉ THÌ CÁC VỊ TRÍ ĐÓ SẼ CHUYỂN SANG ĐỎ
+    Map<String,AnchorPane> listSeatsLayout = new HashMap<>();
     Map<String,SeatLayoutItemController> listSeatsController = new HashMap<>();
+    Map<String,Boolean> listSeatsState = new HashMap<>();
     //STRING : KHUNG THỜI GIAN CHIẾU PHIM
     String timeSlot = "";
-
+    //TRẠNG THÁI CLICKED CỦA CÁC TIME SLOT, MẶC ĐỊNH LÀ FALSE CHƯA CLICKED
+    Boolean[] stateButtonTimeSlot = new Boolean[]{false,false,false,false,false};
+    //NÚT ĐỒNG Ý ĐẶT VÉ THÌ THÊM PHIM VỪA ĐẶT VÀO DANH SÁCH PHIM VỪA BÁN
+    MovieSoldRecentlyController movieSoldRecentlyController;
+    MainController mainController;
+    //PHIM ĐƯỢC XÁC NHẬN ĐỂ MUA
+    MovieObject.Movie movie;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -81,62 +99,168 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
     }
 
 
+    public void setMovie(MovieObject.Movie item){
+        this.movie = item;
+    }
+
+    public void setMovieSoldRecentlyController(MovieSoldRecentlyController movieSoldRecentlyController){
+        this.movieSoldRecentlyController = movieSoldRecentlyController;
+    }
+
+    public void setMainController(MainController mainController){
+        this.mainController = mainController;
+    }
+
     //KHỞI TẠO LAYOUT CÁC GHẾ CỦA PHÒNG CHIẾU
     public void InitializeLayoutSeats(){
+        timeSlot = Utils.SLOT_9_45_AM;
+        InitLayoutSeatsSelected(Utils.SLOT_9_45_AM);
+    }
+
+    public void InitLayoutSeatsSelected(String time){
+        System.out.println("SIZE ALL : "+mapParentLayout.size());
+        seatNumberString.clear();
+        gridPaneLayoutSeats.getChildren().clear();
+        mapLayout.clear();mapController.clear();mapState.clear();
+        listSeatsController.clear();listSeatsLayout.clear();listSeatsState.clear();
         String[] verticalTitle = new String[]{"J","I","H","G","F","","E","D","C","B","A"};
-        for (int i = 0; i < 11; i++) {
-            for (int j = 0; j < 21; j++) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("view/seat_layout_item.fxml"));
-                AnchorPane anchorPane = null;
-                try {
-                    anchorPane = fxmlLoader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                SeatLayoutItemController controller = fxmlLoader.getController();
-                if(i == 0){
-                    if(j != 0 && j != 1 && j != 19 && j != 20){
-                        gridPaneLayoutSeats.add(anchorPane,j+3,i+1);
+        //NẾU MAP KHÔNG RỖNG THÌ RELOAD LẠI LAYOUT CŨ
+        //KIỂM TRA NẾU MAP CHỨA CÁC ITEM THÌ KIỂM TRA XEM NÓ CÓ CHỨA PHIM ĐƯỢC MUA HIỆN TẠI HAY KHÔNG
+        //VÀ CÓ CHỨA TIME SLOT HIỆN TẠI HAY CHƯA
+        //NẾU CHƯA THÌ THÊM MỚI CHƯA THÌ LOAD TỪ MAP LÊN
+        if(mapParentLayout.size() > 0 && mapParentLayout.containsKey(movie.getId()) && movie != null && mapParentLayout.get(movie.getId()).containsKey(time)){
+            //NẾU CHỨA KEY THÌ LOAD LẠI LAYOUT CŨ THÔNG QUA 3 CÁI MAP
+            //mapParentLayout, mapParentController, mapParentState
+            //System.out.println("VALUES KEY 22222: "+mapParentLayout.keySet()+" -- "+mapParentLayout.get("634649").keySet()+" -- "+mapParentLayout.get("634649").get("09:45 AM").keySet());
+            Map<String,Boolean> tempMapStateItems = new HashMap<>();
+            Map<String,AnchorPane> tempMapLayoutItems = new HashMap<>();
+            Map<String,SeatLayoutItemController> tempMapControllerItems = new HashMap<>();
+
+            tempMapStateItems = mapParentStateSeat.get(movie.getId()).get(time);
+            tempMapLayoutItems = mapParentLayout.get(movie.getId()).get(time);
+            tempMapControllerItems = mapParentController.get(movie.getId()).get(time);
+
+            //System.out.println("SIZE LOADING : "+tempMapStateItems.size()+" -- "+tempMapLayoutItems.size()+" -- "+tempMapControllerItems.size());
+
+
+            //CONVERT MAP TO LIST
+            //tempMapStateItems.
+            for (int i = 0; i < 11; i++) {
+                for (int j = 0; j < 21; j++) {
+
+                    String title = verticalTitle[i] + (j + 1);
+                    AnchorPane anchorPane = tempMapLayoutItems.get(title);
+                    boolean state = tempMapStateItems.get(title);
+                    SeatLayoutItemController controller = tempMapControllerItems.get(title);
+
+                    if(i == 0){
+                        if(j != 0 && j != 1 && j != 19 && j != 20){
+                            gridPaneLayoutSeats.add(anchorPane,j+3,i+1);
+                        }
+                    }
+                    else if(i == 1){
+                        if(j != 0 && j != 20){
+                            gridPaneLayoutSeats.add(anchorPane,j+3,i+1);
+                        }
+                    }
+                    else if(i == 2 || i == 3 || i ==4 || i == 6 || i == 7 || i ==8 || i == 9 || i == 10){
+                        if(j != 10){
+                            gridPaneLayoutSeats.add(anchorPane,j+3,i+1);
+                        }
+                    }
+
+                    if(!listSeatsState.containsKey(title)){
+                        listSeatsState.put(title,state);
+                    }
+                    if(!listSeatsLayout.containsKey(title)){
+                        listSeatsLayout.put(title,anchorPane);
+                    }
+                    if(!listSeatsController.containsKey(title)){
+                        // listSeatsSelected.put(title,false);
+                        listSeatsController.put(title,controller);
+                    }
+
+                    gridPaneLayoutSeats.setMinWidth(Region.USE_COMPUTED_SIZE);
+                    gridPaneLayoutSeats.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                    gridPaneLayoutSeats.setMaxWidth(Region.USE_PREF_SIZE);
+
+                    //set grid height
+                    gridPaneLayoutSeats.setMinHeight(Region.USE_COMPUTED_SIZE);
+                    gridPaneLayoutSeats.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                    gridPaneLayoutSeats.setMaxHeight(Region.USE_PREF_SIZE);
+
+                    if(i == 4){
+                        GridPane.setMargin(tempMapLayoutItems.get(title), new Insets(3,0,25,5));
+                    }
+                    else{
+                        GridPane.setMargin(tempMapLayoutItems.get(title), new Insets(3,0,5,5));
                     }
                 }
-                else if(i == 1){
-                    if(j != 0 && j != 20){
-                        gridPaneLayoutSeats.add(anchorPane,j+3,i+1);
+            }
+        }
+        else{
+            for (int i = 0; i < 11; i++) {
+                for (int j = 0; j < 21; j++) {
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("view/seat_layout_item.fxml"));
+                    AnchorPane anchorPane = null;
+                    try {
+                        anchorPane = fxmlLoader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }
-                else if(i == 2 || i == 3 || i ==4 || i == 6 || i == 7 || i ==8 || i == 9 || i == 10){
-                    if(j != 10){
-                        gridPaneLayoutSeats.add(anchorPane,j+3,i+1);
+                    SeatLayoutItemController controller = fxmlLoader.getController();
+                    if(i == 0){
+                        if(j != 0 && j != 1 && j != 19 && j != 20){
+                            gridPaneLayoutSeats.add(anchorPane,j+3,i+1);
+                        }
                     }
-                }
-                if(i >= 8){
-                    controller.setType(Utils.TYPE_PRIME);
-                }
+                    else if(i == 1){
+                        if(j != 0 && j != 20){
+                            gridPaneLayoutSeats.add(anchorPane,j+3,i+1);
+                        }
+                    }
+                    else if(i == 2 || i == 3 || i ==4 || i == 6 || i == 7 || i ==8 || i == 9 || i == 10){
+                        if(j != 10){
+                            gridPaneLayoutSeats.add(anchorPane,j+3,i+1);
+                        }
+                    }
+                    //TỪ HÀNG 8 TRỞ ĐI SẼ LÀ GHẾ PRIME
+                    if(i >= 8){
+                        controller.setType(Utils.TYPE_PRIME);
+                    }
 
-                String title = verticalTitle[i] + (j + 1);
-                controller.setSeatTitle(title);
-                controller.setOnSeatItemClickedListener(this);
+                    String title = verticalTitle[i] + (j + 1);
+                    controller.setSeatTitle(title);
+                    controller.setOnSeatItemClickedListener(this);
 
-                if(!listSeatsSelected.containsKey(title) && !listSeatsController.containsKey(title)){
-                    listSeatsSelected.put(title,false);
-                    listSeatsController.put(title,controller);
-                }
+                    //ADD NEW ITEM TO MAP
+                    if(!listSeatsState.containsKey(title)){
+                        listSeatsState.put(title,false);
+                    }
+                    if(!listSeatsLayout.containsKey(title)){
+                        listSeatsLayout.put(title,anchorPane);
+                    }
+                    if(!listSeatsController.containsKey(title)){
+                        // listSeatsSelected.put(title,false);
+                        listSeatsController.put(title,controller);
+                    }
 
-                gridPaneLayoutSeats.setMinWidth(Region.USE_COMPUTED_SIZE);
-                gridPaneLayoutSeats.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                gridPaneLayoutSeats.setMaxWidth(Region.USE_PREF_SIZE);
+                    gridPaneLayoutSeats.setMinWidth(Region.USE_COMPUTED_SIZE);
+                    gridPaneLayoutSeats.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                    gridPaneLayoutSeats.setMaxWidth(Region.USE_PREF_SIZE);
 
-                //set grid height
-                gridPaneLayoutSeats.setMinHeight(Region.USE_COMPUTED_SIZE);
-                gridPaneLayoutSeats.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                gridPaneLayoutSeats.setMaxHeight(Region.USE_PREF_SIZE);
+                    //set grid height
+                    gridPaneLayoutSeats.setMinHeight(Region.USE_COMPUTED_SIZE);
+                    gridPaneLayoutSeats.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                    gridPaneLayoutSeats.setMaxHeight(Region.USE_PREF_SIZE);
 
-                if(i == 4){
-                    GridPane.setMargin(anchorPane, new Insets(3,0,25,5));
-                }
-                else{
-                    GridPane.setMargin(anchorPane, new Insets(3,0,5,5));
+                    if(i == 4){
+                        GridPane.setMargin(anchorPane, new Insets(3,0,25,5));
+                    }
+                    else{
+                        GridPane.setMargin(anchorPane, new Insets(3,0,5,5));
+                    }
                 }
             }
         }
@@ -275,21 +399,64 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
             Optional<ButtonType> optional = alertConfirmation.showAndWait();
 
             if(optional.get() == agree){
+                System.out.println("AGREEEEEEEEEEEEEEEEEEE : "+timeSlot);
                 alertConfirmation.close();
                 if(seatNumberString.size() > 0){
                     for (String item : seatNumberString.keySet()){
-                        listSeatsSelected.put(item,true);
+                        listSeatsState.put(item,true);
                         listSeatsController.get(item).setType(Utils.TYPE_SELECTED);
+                        System.out.println("TYPE CHANGE : "+listSeatsController.get(item).getType());
                     }
                     seatNumberString.clear();
                 }
+
+                if(!mainController.moviesSoldRecently.containsKey(movie.getId())){
+                    System.out.println("ADD SUCCESSFULLY");
+                    mainController.moviesSoldRecently.put(movie.getId(),movie);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            movieSoldRecentlyController.addNewItem(movie);
+                        }
+                    });
+                }
+
                 //HIỂN THỊ THÔNG BÁO ĐẶT VÉ THÀNH CÔNG
                 Alert alertSuccessfully = new Alert(Alert.AlertType.CONFIRMATION);
                 alertSuccessfully.setTitle("Successfully");
                 alertSuccessfully.setHeaderText("Successful Ticket Booking");
                 alertSuccessfully.showAndWait();
+
+                mapState.put(timeSlot,new HashMap<String,Boolean>(listSeatsState));
+                mapLayout.put(timeSlot,new HashMap<String,AnchorPane>(listSeatsLayout));
+                mapController.put(timeSlot,new HashMap<String,SeatLayoutItemController>(listSeatsController));
+
+                //Map<String,Map<String,Map<String,Boolean>>>
+                //KIỂM TRA XEM PHIM NÀY ĐÃ TỒN TẠI CHƯA
+                //NẾU CHƯA THÌ THÊM VÀO CÒN RỒI THÌ UPDATE KHUNG GIỜ CHIẾU
+                if(!mapParentLayout.containsKey(movie.getId())){
+                    System.out.println("EXISTEDDDDDDDDDDDDDDDDDD");
+                    mapParentStateSeat.put(movie.getId(),new HashMap<String,Map<String,Boolean>>(mapState));
+                    mapParentLayout.put(movie.getId(),new HashMap<String,Map<String,AnchorPane>>(mapLayout));
+                    mapParentController.put(movie.getId(),new HashMap<String,Map<String,SeatLayoutItemController>>(mapController));
+                }
+                else {
+                    System.out.println("NOTTTTTTTTTTTTTTTTTT EXISTEDDDDDDDDDDDDDDDDDD");
+                    mapParentStateSeat.get(movie.getId()).put(timeSlot,new HashMap<String,Boolean>(listSeatsState));
+                    mapParentLayout.get(movie.getId()).put(timeSlot,new HashMap<String,AnchorPane>(listSeatsLayout));
+                    mapParentController.get(movie.getId()).put(timeSlot,new HashMap<String,SeatLayoutItemController>(listSeatsController));
+                }
+
+                System.out.println("SIZE AFTER ADD : "+mapParentLayout.size()+" -- "+mapParentLayout.get(movie.getId()).size());
+                timeSlot = Utils.SLOT_9_45_AM;
+                button945AM.setStyle("-fx-background-color: #d98609");
+                button100PM.setStyle("-fx-background-color: #4d913d");
+                button345PM.setStyle("-fx-background-color: #4d913d");
+                button700PM.setStyle("-fx-background-color: #4d913d");
+                button945PM.setStyle("-fx-background-color: #4d913d");
             }
             else if(optional.get() == cancel){
+                System.out.println("DISSSSSSSSSSSSSSSSAGREEEEEEEEEEEEEEEEEEE");
                 alertConfirmation.close();
             }
 
@@ -307,19 +474,34 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
     @FXML
     public void onButtonChooseTimeSlot(ActionEvent actionEvent){
         if(actionEvent.getSource() == button945AM){
-            timeSlot = Utils.SLOT_9_45_AM;
+            if(!timeSlot.equals(Utils.SLOT_9_45_AM)){
+                timeSlot = Utils.SLOT_9_45_AM;
+                InitLayoutSeatsSelected(timeSlot);
+            }
         }
         else if(actionEvent.getSource() == button100PM){
-            timeSlot = Utils.SLOT_1_00_PM;
+            if(!timeSlot.equals(Utils.SLOT_1_00_PM)){
+                timeSlot = Utils.SLOT_1_00_PM;
+                InitLayoutSeatsSelected(timeSlot);
+            }
         }
         else if(actionEvent.getSource() == button345PM){
-            timeSlot = Utils.SLOT_3_45_PM;
+            if(!timeSlot.equals(Utils.SLOT_3_45_PM)){
+                timeSlot = Utils.SLOT_3_45_PM;
+                InitLayoutSeatsSelected(timeSlot);
+            }
         }
         else if(actionEvent.getSource() == button700PM){
-            timeSlot = Utils.SLOT_7_00_PM;
+            if(!timeSlot.equals(Utils.SLOT_7_00_PM)){
+                timeSlot = Utils.SLOT_7_00_PM;
+                InitLayoutSeatsSelected(timeSlot);
+            }
         }
         else if(actionEvent.getSource() == button945PM){
-            timeSlot = Utils.SLOT_9_45_PM;
+            if(!timeSlot.equals(Utils.SLOT_9_45_PM)){
+                timeSlot = Utils.SLOT_9_45_PM;
+                InitLayoutSeatsSelected(timeSlot);
+            }
         }
     }
 
@@ -330,15 +512,49 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
         if(seatNumberString.size() > 0){
             for (String item : seatNumberString.keySet()){
                 System.out.println("TYPEEEEEEEEEE : "+item);
-                listSeatsSelected.put(item,false);
+                //listSeatsSelected.put(item,false);
                 listSeatsController.get(item).setType(seatNumberString.get(item));
             }
             seatNumberString.clear();
         }
     }
 
+    //KIỂM TRA NGƯỜI DÙNG ĐÃ CHỌN KHUNG GIỜ CHIẾU VÀ CHỖ NGỒI CHƯA
     public boolean checkUserInputNotNull(){
-        return timeSlot.trim().isEmpty() && seatNumberString.size() == 0;
+        return timeSlot.trim().isEmpty() || seatNumberString.size() == 0;
+    }
+
+
+    //THAY ĐỔI BACKGROUND CỦA BUTTON MỖI KHI ĐƯỢC CHỌN
+    //VÀ TRỞ VỀ MÀU BAN ĐẦU MỖI KHI NHẤN NÚT KHÁC
+    @FXML
+    public void onTimeSlotsClicked(MouseEvent mouseEvent){
+        changeStateButtonTimeSlotToFalse();
+        if(mouseEvent.getSource() == button945AM){
+            stateButtonTimeSlot[0] = true;
+        }
+        else if(mouseEvent.getSource() == button100PM){
+            stateButtonTimeSlot[1] = true;
+        }
+        else if(mouseEvent.getSource() == button345PM){
+            stateButtonTimeSlot[2] = true;
+        }
+        else if(mouseEvent.getSource() == button700PM){
+            stateButtonTimeSlot[3] = true;
+        }
+        else if(mouseEvent.getSource() == button945PM){
+            stateButtonTimeSlot[4] = true;
+        }
+        button945AM.setStyle(stateButtonTimeSlot[0] ? "-fx-background-color: #d98609":"-fx-background-color: #4d913d");
+        button100PM.setStyle(stateButtonTimeSlot[1] ? "-fx-background-color: #d98609":"-fx-background-color: #4d913d");
+        button345PM.setStyle(stateButtonTimeSlot[2] ? "-fx-background-color: #d98609":"-fx-background-color: #4d913d");
+        button700PM.setStyle(stateButtonTimeSlot[3] ? "-fx-background-color: #d98609":"-fx-background-color: #4d913d");
+        button945PM.setStyle(stateButtonTimeSlot[4] ? "-fx-background-color: #d98609":"-fx-background-color: #4d913d");
+    }
+
+    //THAY ĐỔI TRẠNG THÁI CỦA CÁC BUTTON TIME SLOT VỀ FALSE
+    public void changeStateButtonTimeSlotToFalse(){
+        Arrays.fill(stateButtonTimeSlot, false);
     }
 
 }

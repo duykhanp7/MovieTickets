@@ -390,18 +390,21 @@ public class MainController implements Initializable, OnItemClickedListener {
     //NÚT MUA VÉ XEM PHIM DƯỚI MỖI ITEM PHIM
     @Override
     public void onButtonBuyClicked(MovieObject.Movie item) {
-        if(!moviesSoldRecently.containsKey(item.getId())){
-            System.out.println("ADD SUCCESSFULLY");
-            moviesSoldRecently.put(item.getId(),item);
-            System.out.println("ITEM BUY : "+item.getId()+" -- "+item.getTitle());
-            //SAU KHI XUẤT VÉ THÀNH CÔNG THÌ MỚI THÊM PHIM VÀO DANH SÁCH BÁN GẦN ĐÂY
-//            Platform.runLater(new Runnable() {
-//                @Override
-//                public void run() {
-//                    movieSoldRecentlyController.addNewItem(item);
-//                }
-//            });
-
+//        if(!moviesSoldRecently.containsKey(item.getId())){
+//            System.out.println("ADD SUCCESSFULLY");
+//            moviesSoldRecently.put(item.getId(),item);
+//            System.out.println("ITEM BUY : "+item.getId()+" -- "+item.getTitle());
+//            //SAU KHI XUẤT VÉ THÀNH CÔNG THÌ MỚI THÊM PHIM VÀO DANH SÁCH BÁN GẦN ĐÂY
+////            Platform.runLater(new Runnable() {
+////                @Override
+////                public void run() {
+////                    movieSoldRecentlyController.addNewItem(item);
+////                }
+////            });
+//        }
+        if(soldTicketsController.mainController == null && soldTicketsController.movieSoldRecentlyController == null){
+            soldTicketsController.setMainController(this);
+            soldTicketsController.setMovieSoldRecentlyController(movieSoldRecentlyController);
         }
         //MÓC API ĐỂ LẤY THÔNG TIN CHI TIẾT CỦA PHIM
         API.api.getDetailMovie(item.getId(),Utils.API_KEY).enqueue(new Callback<TempObject>() {
@@ -417,6 +420,8 @@ public class MainController implements Initializable, OnItemClickedListener {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
+                        soldTicketsController.setMovie(item);
+                        soldTicketsController.InitLayoutSeatsSelected(Utils.SLOT_9_45_AM);
                         stageSellTickets.show();
                     }
                 });
