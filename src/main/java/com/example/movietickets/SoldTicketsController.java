@@ -1,8 +1,10 @@
 package com.example.movietickets;
 
 import com.example.movietickets.interf.OnSeatItemClickedListener;
+import com.example.movietickets.model.CinemaRoom;
 import com.example.movietickets.model.GenresObject;
 import com.example.movietickets.model.MovieObject;
+import com.example.movietickets.model.TicketType;
 import com.example.movietickets.utils.Utils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -22,6 +24,7 @@ import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.*;
 
 public class SoldTicketsController implements Initializable, OnSeatItemClickedListener {
@@ -69,10 +72,10 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
     //MAP QUẢN LÝ DỰA VÀO TÊN PHIM VÀ CÁC KHUNG GIỜ CHIẾU;
     //ID PHIM, KHUNG GIỜ CHIẾU, TÊN GHẾ VÀ CONTROLLER
     //ID PHIM, KHUNG GIỜ CHIẾU, TÊN GHẾ VÀ LAYOUT
-    Map<String,Map<String,Map<String,Boolean>>> mapParentStateSeat = new HashMap<>();
-    Map<String,Map<String,Map<String,AnchorPane>>> mapParentLayout = new HashMap<>();
-    Map<String,Map<String,Map<String,SeatLayoutItemController>>> mapParentController = new HashMap<>();
-
+//    Map<String,Map<String,Map<String,Boolean>>> mapParentStateSeat = new HashMap<>();
+//    Map<String,Map<String,Map<String,AnchorPane>>> mapParentLayout = new HashMap<>();
+//    Map<String,Map<String,Map<String,SeatLayoutItemController>>> mapParentController = new HashMap<>();
+    CinemaRoom cinemaRoom = new CinemaRoom("ROOM1","ROOM 1");
     Map<String,Map<String,Boolean>> mapState = new HashMap<>();
     Map<String,Map<String,AnchorPane>> mapLayout = new HashMap<>();
     Map<String,Map<String,SeatLayoutItemController>> mapController = new HashMap<>();
@@ -92,15 +95,21 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
     MainController mainController;
     //PHIM ĐƯỢC XÁC NHẬN ĐỂ MUA
     MovieObject.Movie movie;
+    //
+    int row = 0;
+    int column = 0;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        cinemaRoom.setMovieId("414906");
         InitializeLayoutSeats();
     }
 
 
     public void setMovie(MovieObject.Movie item){
         this.movie = item;
+        cinemaRoom.setMovie(item);
     }
 
     public void setMovieSoldRecentlyController(MovieSoldRecentlyController movieSoldRecentlyController){
@@ -118,7 +127,6 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
     }
 
     public void InitLayoutSeatsSelected(String time){
-        System.out.println("SIZE ALL : "+mapParentLayout.size());
         seatNumberString.clear();
         gridPaneLayoutSeats.getChildren().clear();
         mapLayout.clear();mapController.clear();mapState.clear();
@@ -128,7 +136,7 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
         //KIỂM TRA NẾU MAP CHỨA CÁC ITEM THÌ KIỂM TRA XEM NÓ CÓ CHỨA PHIM ĐƯỢC MUA HIỆN TẠI HAY KHÔNG
         //VÀ CÓ CHỨA TIME SLOT HIỆN TẠI HAY CHƯA
         //NẾU CHƯA THÌ THÊM MỚI CHƯA THÌ LOAD TỪ MAP LÊN
-        if(mapParentLayout.size() > 0 && mapParentLayout.containsKey(movie.getId()) && movie != null && mapParentLayout.get(movie.getId()).containsKey(time)){
+        if(cinemaRoom.mapParentLayout.size() > 0 && cinemaRoom.mapParentLayout.containsKey(movie.getId()) && movie != null && cinemaRoom.mapParentLayout.get(movie.getId()).containsKey(time)){
             //NẾU CHỨA KEY THÌ LOAD LẠI LAYOUT CŨ THÔNG QUA 3 CÁI MAP
             //mapParentLayout, mapParentController, mapParentState
             //System.out.println("VALUES KEY 22222: "+mapParentLayout.keySet()+" -- "+mapParentLayout.get("634649").keySet()+" -- "+mapParentLayout.get("634649").get("09:45 AM").keySet());
@@ -136,9 +144,9 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
             Map<String,AnchorPane> tempMapLayoutItems = new HashMap<>();
             Map<String,SeatLayoutItemController> tempMapControllerItems = new HashMap<>();
 
-            tempMapStateItems = mapParentStateSeat.get(movie.getId()).get(time);
-            tempMapLayoutItems = mapParentLayout.get(movie.getId()).get(time);
-            tempMapControllerItems = mapParentController.get(movie.getId()).get(time);
+            tempMapStateItems = cinemaRoom.mapParentStateSeat.get(movie.getId()).get(time);
+            tempMapLayoutItems = cinemaRoom.mapParentLayout.get(movie.getId()).get(time);
+            tempMapControllerItems = cinemaRoom.mapParentController.get(movie.getId()).get(time);
 
             //System.out.println("SIZE LOADING : "+tempMapStateItems.size()+" -- "+tempMapLayoutItems.size()+" -- "+tempMapControllerItems.size());
 
@@ -225,14 +233,17 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
                             gridPaneLayoutSeats.add(anchorPane,j+3,i+1);
                         }
                     }
+                    controller.setTicketType(Utils.TICKER_NORMAL);
                     //TỪ HÀNG 8 TRỞ ĐI SẼ LÀ GHẾ PRIME
                     if(i >= 8){
                         controller.setType(Utils.TYPE_PRIME);
+                        controller.setTicketType(Utils.TICKER_PRIME);
                     }
 
                     String title = verticalTitle[i] + (j + 1);
                     controller.setSeatTitle(title);
                     controller.setOnSeatItemClickedListener(this);
+
 
                     //ADD NEW ITEM TO MAP
                     if(!listSeatsState.containsKey(title)){
@@ -338,13 +349,23 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
         priceTotal = 0;
         gridGenres.getChildren().clear();
         gridGenres.setAlignment(Pos.CENTER);
-        imageMovie.setImage(new Image(Utils.path_image_domain+item.getPoster_path()));
-        titleMovie.setText(item.getTitle());
-        runtime.setText("Runtime : "+item.getRuntime());
-        tagline.setText(item.getTagline());
-        release_date.setText("Release Date : "+item.getRelease_date());
-        int row = 0;
-        int column = 0;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageMovie.setImage(new Image(Utils.path_image_domain+item.getPoster_path()));
+                        titleMovie.setText(item.getTitle());
+                        runtime.setText("Runtime : "+item.getRuntime());
+                        tagline.setText(item.getTagline());
+                        release_date.setText("Release Date : "+item.getRelease_date());
+                    }
+                });
+            }
+        }).start();
+        row = 0;
+        column = 0;
         for (GenresObject.Genres a : item.getGenres()){
             AnchorPane anchorPane = new AnchorPane();
             Label label = new Label(a.getName());
@@ -352,11 +373,17 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
             label.setContentDisplay(ContentDisplay.CENTER);
             label.setFont(new Font("Agency FB",18));
             anchorPane.getChildren().add(label);
-            if(column == 2){
-                ++row;
-                column = 0;
-            }
-            gridGenres.add(anchorPane,++column,row);
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    if(column == 2){
+                        ++row;
+                        column = 0;
+                    }
+                    gridGenres.add(anchorPane,++column,row);
+                }
+            });
 
             GridPane.setMargin(anchorPane, new Insets(5,0,10,10));
         }
@@ -365,18 +392,28 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
     //BẮT SỰ KIỆN MỖI KHI NHẤN VÀO CHỌN GHẾ NÀO ĐÓ
     //UPDATE SỐ LƯỢNG GHẾ ĐÃ CHỌN, TÊN GHẾ ĐÃ CHỌN
     @Override
-    public void onSeatItemClicked(String text,boolean state,String type) {
+    public void onSeatItemClicked(String text,boolean state,String type,int priceNumber) {
         if(state){
             //THÊM TÊN GHẾ VÀO DANH SÁCH ĐANG CHỌN
+            priceTotal+=priceNumber;
             seatNumberString.put(text,type);
         }
         else {
             //XÓA TÊN GHẾ KHỎI DANH SÁCH ĐẶT
+            priceTotal-=priceNumber;
             seatNumberString.remove(text);
         }
         //UPDATE SỐ LƯỢNG VÀ TÊN GHẾ ĐÃ CHỌN
         seatsSelected.setText(String.valueOf(seatNumberString.size()));
         seatNumber.setText(String.join(", ",seatNumberString.keySet()));
+        price.setText(formatStringToVNDCurrency(priceTotal));
+    }
+
+    public String formatStringToVNDCurrency(int priceTotal){
+        Locale locale = new Locale("vn","VN");
+        Currency currency = Currency.getInstance(locale);
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
+        return numberFormat.format(priceTotal);
     }
 
 
@@ -399,7 +436,7 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
             Optional<ButtonType> optional = alertConfirmation.showAndWait();
 
             if(optional.get() == agree){
-                System.out.println("AGREEEEEEEEEEEEEEEEEEE : "+timeSlot);
+                priceTotal = 0;
                 alertConfirmation.close();
                 if(seatNumberString.size() > 0){
                     for (String item : seatNumberString.keySet()){
@@ -427,33 +464,33 @@ public class SoldTicketsController implements Initializable, OnSeatItemClickedLi
                 alertSuccessfully.setHeaderText("Successful Ticket Booking");
                 alertSuccessfully.showAndWait();
 
-                mapState.put(timeSlot,new HashMap<String,Boolean>(listSeatsState));
-                mapLayout.put(timeSlot,new HashMap<String,AnchorPane>(listSeatsLayout));
-                mapController.put(timeSlot,new HashMap<String,SeatLayoutItemController>(listSeatsController));
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                //Map<String,Map<String,Map<String,Boolean>>>
-                //KIỂM TRA XEM PHIM NÀY ĐÃ TỒN TẠI CHƯA
-                //NẾU CHƯA THÌ THÊM VÀO CÒN RỒI THÌ UPDATE KHUNG GIỜ CHIẾU
-                if(!mapParentLayout.containsKey(movie.getId())){
-                    System.out.println("EXISTEDDDDDDDDDDDDDDDDDD");
-                    mapParentStateSeat.put(movie.getId(),new HashMap<String,Map<String,Boolean>>(mapState));
-                    mapParentLayout.put(movie.getId(),new HashMap<String,Map<String,AnchorPane>>(mapLayout));
-                    mapParentController.put(movie.getId(),new HashMap<String,Map<String,SeatLayoutItemController>>(mapController));
-                }
-                else {
-                    System.out.println("NOTTTTTTTTTTTTTTTTTT EXISTEDDDDDDDDDDDDDDDDDD");
-                    mapParentStateSeat.get(movie.getId()).put(timeSlot,new HashMap<String,Boolean>(listSeatsState));
-                    mapParentLayout.get(movie.getId()).put(timeSlot,new HashMap<String,AnchorPane>(listSeatsLayout));
-                    mapParentController.get(movie.getId()).put(timeSlot,new HashMap<String,SeatLayoutItemController>(listSeatsController));
-                }
+                        mapState.put(timeSlot,new HashMap<String,Boolean>(listSeatsState));
+                        mapLayout.put(timeSlot,new HashMap<String,AnchorPane>(listSeatsLayout));
+                        mapController.put(timeSlot,new HashMap<String,SeatLayoutItemController>(listSeatsController));
 
-                System.out.println("SIZE AFTER ADD : "+mapParentLayout.size()+" -- "+mapParentLayout.get(movie.getId()).size());
-                timeSlot = Utils.SLOT_9_45_AM;
-                button945AM.setStyle("-fx-background-color: #d98609");
-                button100PM.setStyle("-fx-background-color: #4d913d");
-                button345PM.setStyle("-fx-background-color: #4d913d");
-                button700PM.setStyle("-fx-background-color: #4d913d");
-                button945PM.setStyle("-fx-background-color: #4d913d");
+                        //Map<String,Map<String,Map<String,Boolean>>>
+                        //KIỂM TRA XEM PHIM NÀY ĐÃ TỒN TẠI CHƯA
+                        //NẾU CHƯA THÌ THÊM VÀO CÒN RỒI THÌ UPDATE KHUNG GIỜ CHIẾU
+                        if(!cinemaRoom.mapParentLayout.containsKey(movie.getId())){
+                            System.out.println("EXISTEDDDDDDDDDDDDDDDDDD");
+                            cinemaRoom.mapParentStateSeat.put(movie.getId(),new HashMap<String,Map<String,Boolean>>(mapState));
+                            cinemaRoom.mapParentLayout.put(movie.getId(),new HashMap<String,Map<String,AnchorPane>>(mapLayout));
+                            cinemaRoom.mapParentController.put(movie.getId(),new HashMap<String,Map<String,SeatLayoutItemController>>(mapController));
+                        }
+                        else {
+                            System.out.println("NOTTTTTTTTTTTTTTTTTT EXISTEDDDDDDDDDDDDDDDDDD");
+                            cinemaRoom.mapParentStateSeat.get(movie.getId()).put(timeSlot,new HashMap<String,Boolean>(listSeatsState));
+                            cinemaRoom.mapParentLayout.get(movie.getId()).put(timeSlot,new HashMap<String,AnchorPane>(listSeatsLayout));
+                            cinemaRoom.mapParentController.get(movie.getId()).put(timeSlot,new HashMap<String,SeatLayoutItemController>(listSeatsController));
+                        }
+                    }
+                }).start();
+
+//                mainController.stageSellTickets.close();
             }
             else if(optional.get() == cancel){
                 System.out.println("DISSSSSSSSSSSSSSSSAGREEEEEEEEEEEEEEEEEEE");

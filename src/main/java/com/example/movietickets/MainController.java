@@ -4,7 +4,6 @@ package com.example.movietickets;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-
 import com.example.movietickets.controller.ItemMovieController;
 import com.example.movietickets.interf.OnItemClickedListener;
 import com.example.movietickets.model.MovieObject;
@@ -80,6 +79,7 @@ public class MainController implements Initializable, OnItemClickedListener {
     Stage stageSellTickets;
     //CONTROLLER CỦA BÁN VÉ
     SoldTicketsController soldTicketsController;
+    LoginActivityController loginActivityController;
     Scene sceneSellTickets;
 
     //BẢNG TÌM KIẾM
@@ -104,6 +104,9 @@ public class MainController implements Initializable, OnItemClickedListener {
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        if(loginActivityController != null){
+
+        }
         //LẤY DANH SÁCH PHIM PHỔ BIẾN TỪ API TRẢ VỀ
         loadingPane.toFront();
         ProgressIndicator progressIndicator = new ProgressIndicator();
@@ -125,7 +128,7 @@ public class MainController implements Initializable, OnItemClickedListener {
 
         this.stateButtonClicked[0] = true;
         this.buttonHome.setStyle("");
-
+        gridLayoutItemSearch.setStyle("-fx-background-color:#bda2dd");
 
         //KHI SCROLL ĐẾN CUỐI THÌ BẮT ĐẦU LẤY DỮ LIỆU TỪ PAGE TIẾP THEO
         // ĐEM VỀ THEO VÀO GRIDLAYOUT
@@ -139,6 +142,12 @@ public class MainController implements Initializable, OnItemClickedListener {
                         @Override
                         public void run() {
                             if(pageMain < maxPageMain){
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loadingPane.toFront();
+                                    }
+                                });
                                 try {
                                     getDataFromAPI(++pageMain);
                                 }
@@ -173,6 +182,12 @@ public class MainController implements Initializable, OnItemClickedListener {
                                             new Thread(new Runnable() {
                                                 @Override
                                                 public void run() {
+                                                    Platform.runLater(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            loadingPane.toFront();
+                                                        }
+                                                    });
                                                     InitLayoutContainMoviesResult(text,++pageSearch);
                                                 }
                                             }).start();
@@ -196,6 +211,10 @@ public class MainController implements Initializable, OnItemClickedListener {
 
     }
 
+    public void setLoginActivityController(LoginActivityController loginActivityController){
+        this.loginActivityController = loginActivityController;
+    }
+
     //THAY ĐỔI BACKGROUND CỦA BUTTON MỖI KHI NHẤN
     @FXML
     private void onButtonClickedChangeBackgroundColor(MouseEvent mouseEvent) {
@@ -209,10 +228,10 @@ public class MainController implements Initializable, OnItemClickedListener {
             this.changeStateButtonClicked(3);
         }
 
-        this.buttonHome.setStyle(this.stateButtonClicked[0] ? "-fx-background-color:#4a4c4f" : "-fx-background-color:#616366");
-        this.buttonMore.setStyle(this.stateButtonClicked[1] ? "-fx-background-color:#4a4c4f" : "-fx-background-color:#616366");
-        this.buttonMovieScreens.setStyle(this.stateButtonClicked[2] ? "-fx-background-color:#4a4c4f" : "-fx-background-color:#616366");
-        this.buttonLogout.setStyle(this.stateButtonClicked[3] ? "-fx-background-color:#4a4c4f" : "-fx-background-color:#616366");
+        this.buttonHome.setStyle(this.stateButtonClicked[0] ? "-fx-background-color:#311b4b" : "-fx-background-color:#4a2970");
+        this.buttonMore.setStyle(this.stateButtonClicked[1] ? "-fx-background-color:#311b4b" : "-fx-background-color:#4a2970");
+        this.buttonMovieScreens.setStyle(this.stateButtonClicked[2] ? "-fx-background-color:#311b4b" : "-fx-background-color:#4a2970");
+        this.buttonLogout.setStyle(this.stateButtonClicked[3] ? "-fx-background-color:#311b4b" : "-fx-background-color:#4a2970");
 
 
     }
@@ -230,10 +249,10 @@ public class MainController implements Initializable, OnItemClickedListener {
             this.changeStateButtonHovered(3);
         }
 
-        this.buttonHome.setStyle(this.stateButtonClicked[0] ? "-fx-background-color:#4a4c4f" : (this.stateButtonHovered[0] ? "-fx-background-color:#7c7f83" : "-fx-background-color:#616366"));
-        this.buttonMore.setStyle(this.stateButtonClicked[1] ? "-fx-background-color:#4a4c4f" : (this.stateButtonHovered[1] ? "-fx-background-color:#7c7f83" : "-fx-background-color:#616366"));
-        this.buttonMovieScreens.setStyle(this.stateButtonClicked[2] ? "-fx-background-color:#4a4c4f" : (this.stateButtonHovered[2] ? "-fx-background-color:#7c7f83" : "-fx-background-color:#616366"));
-        this.buttonLogout.setStyle(this.stateButtonClicked[3] ? "-fx-background-color:#4a4c4f" : (this.stateButtonHovered[3] ? "-fx-background-color:#7c7f83" : "-fx-background-color:#616366"));
+        this.buttonHome.setStyle(this.stateButtonClicked[0] ? "-fx-background-color:#311b4b" : (this.stateButtonHovered[0] ? "-fx-background-color:#633795" : "-fx-background-color:#4a2970"));
+        this.buttonMore.setStyle(this.stateButtonClicked[1] ? "-fx-background-color:#311b4b" : (this.stateButtonHovered[1] ? "-fx-background-color:#633795" : "-fx-background-color:#4a2970"));
+        this.buttonMovieScreens.setStyle(this.stateButtonClicked[2] ? "-fx-background-color:#311b4b" : (this.stateButtonHovered[2] ? "-fx-background-color:#633795" : "-fx-background-color:#4a2970"));
+        this.buttonLogout.setStyle(this.stateButtonClicked[3] ? "-fx-background-color:#311b4b" : (this.stateButtonHovered[3] ? "-fx-background-color:#633795" : "-fx-background-color:#4a2970"));
     }
 
 
@@ -289,6 +308,12 @@ public class MainController implements Initializable, OnItemClickedListener {
             public void onResponse(Call<MovieObject> call, Response<MovieObject> response) {
                 //NẾU DỮ LIỆU TRẢ VỀ KHÔNG NULL THÌ UP DATA LÊN VIEWS
                 if(response.body().getMovies().size() > 0){
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadingPane.toBack();
+                        }
+                    });
                     popularMovies.add(response.body());
                     MovieObject movieObject = response.body();
                     maxPageMain = Integer.parseInt(movieObject.getTotal_pages());
@@ -390,48 +415,44 @@ public class MainController implements Initializable, OnItemClickedListener {
     //NÚT MUA VÉ XEM PHIM DƯỚI MỖI ITEM PHIM
     @Override
     public void onButtonBuyClicked(MovieObject.Movie item) {
-//        if(!moviesSoldRecently.containsKey(item.getId())){
-//            System.out.println("ADD SUCCESSFULLY");
-//            moviesSoldRecently.put(item.getId(),item);
-//            System.out.println("ITEM BUY : "+item.getId()+" -- "+item.getTitle());
-//            //SAU KHI XUẤT VÉ THÀNH CÔNG THÌ MỚI THÊM PHIM VÀO DANH SÁCH BÁN GẦN ĐÂY
-////            Platform.runLater(new Runnable() {
-////                @Override
-////                public void run() {
-////                    movieSoldRecentlyController.addNewItem(item);
-////                }
-////            });
-//        }
-        if(soldTicketsController.mainController == null && soldTicketsController.movieSoldRecentlyController == null){
-            soldTicketsController.setMainController(this);
-            soldTicketsController.setMovieSoldRecentlyController(movieSoldRecentlyController);
+        if(soldTicketsController.cinemaRoom.idMovie.equals(item.getId())){
+            System.out.println("PHIM DANG MO BAN");
+            if(soldTicketsController.mainController == null && soldTicketsController.movieSoldRecentlyController == null){
+                soldTicketsController.setMainController(this);
+                soldTicketsController.setMovieSoldRecentlyController(movieSoldRecentlyController);
+            }
+            //MÓC API ĐỂ LẤY THÔNG TIN CHI TIẾT CỦA PHIM
+            API.api.getDetailMovie(item.getId(),Utils.API_KEY).enqueue(new Callback<TempObject>() {
+                @Override
+                public void onResponse(Call<TempObject> call, Response<TempObject> response) {
+                    TempObject tempObject = response.body();
+                    item.setGenres(tempObject.getGenres());
+                    item.setRelease_date(tempObject.getRelease_date());
+                    item.setRuntime(tempObject.getRuntime());
+                    item.setTagline(tempObject.getTagline());
+
+                    soldTicketsController.setMovie(item);
+                    soldTicketsController.setContent(item);
+                    soldTicketsController.InitLayoutSeatsSelected(Utils.SLOT_9_45_AM);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            stageSellTickets.show();
+                        }
+                    });
+
+
+                }
+
+                @Override
+                public void onFailure(Call<TempObject> call, Throwable throwable) {
+
+                }
+            });
         }
-        //MÓC API ĐỂ LẤY THÔNG TIN CHI TIẾT CỦA PHIM
-        API.api.getDetailMovie(item.getId(),Utils.API_KEY).enqueue(new Callback<TempObject>() {
-            @Override
-            public void onResponse(Call<TempObject> call, Response<TempObject> response) {
-                TempObject tempObject = response.body();
-                item.setGenres(tempObject.getGenres());
-                item.setRelease_date(tempObject.getRelease_date());
-                item.setRuntime(tempObject.getRuntime());
-                item.setTagline(tempObject.getTagline());
-
-                soldTicketsController.setContent(item);
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        soldTicketsController.setMovie(item);
-                        soldTicketsController.InitLayoutSeatsSelected(Utils.SLOT_9_45_AM);
-                        stageSellTickets.show();
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(Call<TempObject> call, Throwable throwable) {
-
-            }
-        });
+        else{
+            System.out.println("PHIM CHUA MO BAN BAN EIIIIIIIIIIIII");
+        }
     }
 
 
@@ -458,7 +479,12 @@ public class MainController implements Initializable, OnItemClickedListener {
         String keyword = textFieldSearch.getText().trim().toString().toLowerCase();
         //NẾU KEYWORD MỚI VÀ CŨ TRÙNG NHAU THÌ KHÔNG CẦN LOAD LẠI
         if(!oldKeyword.equals(keyword)){
-            loadingPane.toFront();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    loadingPane.toFront();
+                }
+            });
             System.out.println("DIFFERENT KEYWORD");
             oldKeyword = keyword;
             if(!keyword.isEmpty()){
@@ -641,6 +667,12 @@ public class MainController implements Initializable, OnItemClickedListener {
                 soldTicketsController.seatsSelected.setText("");
                 soldTicketsController.seatNumber.setText("");
                 soldTicketsController.price.setText("");
+                soldTicketsController.button945AM.setStyle("-fx-background-color: #d98609");
+                soldTicketsController.button100PM.setStyle("-fx-background-color: #4d913d");
+                soldTicketsController.button345PM.setStyle("-fx-background-color: #4d913d");
+                soldTicketsController.button700PM.setStyle("-fx-background-color: #4d913d");
+                soldTicketsController.button945PM.setStyle("-fx-background-color: #4d913d");
+                soldTicketsController.timeSlot = Utils.SLOT_9_45_AM;
             }
         });
     }

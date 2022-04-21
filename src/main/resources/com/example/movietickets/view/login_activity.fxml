@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="611.0" prefWidth="812.0" style="-fx-background-radius: 20;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.LoginActivityController">
+   <children>
+      <HBox prefHeight="611.0" prefWidth="854.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="611.0" prefWidth="344.0" style="-fx-background-color: #200540;">
+               <children>
+                  <ImageView fitHeight="410.0" fitWidth="305.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/background_login.png" />
+                     </image></ImageView>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="611.0" prefWidth="512.0" style="-fx-background-color: #4a2870;">
+               <children>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="96.0" prefWidth="455.0">
+                     <children>
+                        <Label fx:id="buttonSignUp" alignment="BOTTOM_RIGHT" onMouseClicked="#onClickButtonSignUp" prefHeight="58.0" prefWidth="104.0" text="Sign Up" textFill="WHITE" underline="true">
+                           <font>
+                              <Font name="Agency FB" size="20.0" />
+                           </font>
+                           <padding>
+                              <Insets right="30.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <ImageView fitHeight="100.0" fitWidth="103.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/staff_ic.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </ImageView>
+                  <Label prefHeight="111.0" prefWidth="175.0" text="STAFF LOGIN" textFill="WHITE">
+                     <font>
+                        <Font name="Agency FB" size="45.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <VBox alignment="TOP_CENTER" prefHeight="364.0" prefWidth="431.0">
+                     <children>
+                        <HBox alignment="BOTTOM_CENTER" prefHeight="54.0" prefWidth="455.0" spacing="20.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="44.0" prefWidth="102.0" text="Phone Number" textFill="WHITE">
+                                 <font>
+                                    <Font name="Agency FB" size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="phoneNumberField" prefHeight="35.0" prefWidth="193.0">
+                                 <padding>
+                                    <Insets left="20.0" />
+                                 </padding>
+                                 <font>
+                                    <Font name="Agency FB" size="15.0" />
+                                 </font></TextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="46.0" prefWidth="431.0" spacing="10.0">
+                           <children>
+                              <Label alignment="CENTER_RIGHT" prefHeight="46.0" prefWidth="119.0" text="Password" textFill="WHITE">
+                                 <font>
+                                    <Font name="Agency FB" size="20.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Label>
+                              <Pane prefHeight="36.0" prefWidth="196.0">
+                                 <HBox.margin>
+                                    <Insets left="30.0" top="5.0" />
+                                 </HBox.margin>
+                                 <children>
+                                    <PasswordField fx:id="passwordFieldHide" prefHeight="35.0" prefWidth="196.0">
+                                       <padding>
+                                          <Insets left="20.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Agency FB" size="15.0" />
+                                       </font>
+                                    </PasswordField>
+                                    <TextField fx:id="passwordFieldShow" prefHeight="35.0" prefWidth="196.0">
+                                       <font>
+                                          <Font name="Agency FB" size="15.0" />
+                                       </font></TextField>
+                                 </children>
+                              </Pane>
+                              <ImageView fx:id="ic_show_pass" fitHeight="26.0" fitWidth="82.0" onMouseClicked="#onButtonShowOrHidePassword" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../image/hide_pass.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="12.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="BOTTOM_RIGHT" prefHeight="31.0" prefWidth="455.0">
+                           <children>
+                              <Label fx:id="warningLogin" alignment="CENTER" prefHeight="47.0" prefWidth="246.0" text="(*) Wrong Phone Number Or Password" textFill="#ff7100" visible="false">
+                                 <font>
+                                    <Font name="Agency FB" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="47.0" prefWidth="455.0">
+                           <children>
+                              <Button fx:id="loginButton" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onButtonLogin" prefHeight="28.0" prefWidth="115.0" text="Login">
+                                 <font>
+                                    <Font name="Agency FB" size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="40.0" top="30.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <VBox alignment="CENTER_RIGHT">
+                           <children>
+                              <Label fx:id="forgot_pass_button" alignment="CENTER_RIGHT" prefHeight="57.0" prefWidth="155.0" text="Forgot Password ?" textFill="WHITE" underline="true">
+                                 <font>
+                                    <Font name="Agency FB" size="20.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets right="35.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin></VBox>
+               </children></VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -22,8 +22,10 @@ public class MainApplication extends Application {
 
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(MainApplication.class.getResource("view/main_activity.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1200.0D, 650.0D);
+        fxmlLoader.setLocation(MainApplication.class.getResource("view/login_activity.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 850, 600);
+        stage.setResizable(false);
+        stage.centerOnScreen();
         stage.setTitle("Cinema");
         stage.setScene(scene);
         stage.show();

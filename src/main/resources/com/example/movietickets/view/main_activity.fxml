@@ -10,7 +10,7 @@
     <children>
         <AnchorPane prefHeight="818.0" prefWidth="294.0" style="-fx-background-color: #e2e879;">
             <children>
-                <VBox prefHeight="801.0" prefWidth="294.0" style="-fx-background-color: #616366;">
+                <VBox prefHeight="801.0" prefWidth="294.0" style="-fx-background-color: #4a2870;">
                     <children>
                         <Pane prefHeight="150.0" prefWidth="217.0">
                             <children>
@@ -28,7 +28,7 @@
                                 </HBox>
                             </children>
                         </Pane>
-                        <Button fx:id="buttonHome" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="70.0" prefWidth="292.0" style="-fx-background-color: #4a4c4f;" text="Home" textFill="WHITE">
+                        <Button fx:id="buttonHome" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="70.0" prefWidth="292.0" style="-fx-background-color: #311b4b;" text="Home" textFill="WHITE">
                             <font>
                                 <Font name="Agency FB" size="30.0" />
                             </font>
@@ -36,19 +36,19 @@
                                 <Insets />
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="buttonMovieScreens" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="314.0" style="-fx-background-color: #616366;" text="Movie Screens" textFill="WHITE">
+                        <Button fx:id="buttonMovieScreens" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="314.0" style="-fx-background-color: #4a2870;" text="Movie Screens" textFill="WHITE">
                             <font>
                                 <Font name="Agency FB" size="30.0" />
                             </font>
                         </Button>
-                        <Button fx:id="buttonMore" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="296.0" style="-fx-background-color: #616366;" text="More" textFill="WHITE">
+                        <Button fx:id="buttonMore" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="296.0" style="-fx-background-color: #4a2870;" text="More" textFill="WHITE">
                             <font>
                                 <Font name="Agency FB" size="30.0" />
                             </font>
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin></Button>
-                        <Button fx:id="buttonLogout" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="294.0" style="-fx-background-color: #616366;" text="Log out" textFill="WHITE">
+                        <Button fx:id="buttonLogout" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="294.0" style="-fx-background-color: #4a2870;" text="Log out" textFill="WHITE">
                             <font>
                                 <Font name="Agency FB" size="30.0" />
                             </font>
@@ -61,7 +61,7 @@
             <children>
             <VBox fx:id="loadingPane" alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="77.0" prefWidth="1071.0" text="DỮ LIỆU ĐANG ĐƯỢC TẢI, QUÝ KHÁCH VUI LÒNG CHỜ CHÚT......" textFill="#a85e04">
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="77.0" prefWidth="1071.0" text="DỮ LIỆU ĐANG ĐƯỢC TẢI, QUÝ KHÁCH VUI LÒNG CHỜ CHÚT......" textFill="WHITE">
                      <font>
                         <Font name="Agency FB" size="25.0" />
                      </font>
@@ -75,7 +75,7 @@
                <children>
                   <VBox alignment="TOP_CENTER">
                      <children>
-                        <HBox alignment="TOP_RIGHT" prefHeight="51.0" prefWidth="1071.0" spacing="20.0" style="-fx-background-color: #d5d6bf;">
+                        <HBox alignment="TOP_RIGHT" prefHeight="51.0" prefWidth="1071.0" spacing="20.0" style="-fx-background-color: #bda2dd;">
                            <children>
                               <Button fx:id="buttonMoviesRecently" mnemonicParsing="false" onAction="#showMoviesTicketsSoldRecently" prefHeight="33.0" prefWidth="189.0" text="Recently Sold Movie Tickets" underline="true">
                                  <font>
@@ -126,7 +126,7 @@
                               </ScrollPane>
                               <ScrollPane fx:id="scrollPane" prefHeight="760.0" prefWidth="1071.0" style="-fx-background-color: #FFFFFF00;">
                                  <content>
-                                    <VBox prefHeight="802.0" prefWidth="1071.0" style="-fx-background-color: #d5d6bf;">
+                                    <VBox prefHeight="802.0" prefWidth="1071.0" style="-fx-background-color: #bda2dd;">
                                        <children>
             
                                            <GridPane fx:id="gridAdapter" prefHeight="262.0" prefWidth="317.0">

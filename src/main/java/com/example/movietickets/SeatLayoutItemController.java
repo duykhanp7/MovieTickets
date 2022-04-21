@@ -1,6 +1,7 @@
 package com.example.movietickets;
 
 import com.example.movietickets.interf.OnSeatItemClickedListener;
+import com.example.movietickets.model.TicketType;
 import com.example.movietickets.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,10 +31,13 @@ public class SeatLayoutItemController implements Initializable {
     Boolean stateSelected = false;
     //SỰ KIỆN MỖI KHI NHẤN CHỌN GHẾ
     OnSeatItemClickedListener onSeatItemClickedListener;
+    //LOẠI VÉ
+    TicketType ticketType;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ticketType = new TicketType();
         //selectSeatButton.setStyle( type.equals(Utils.TYPE_NORMAL) ?  "-fx-background-color:#72d684": type.equals(Utils.TYPE_PRIME) ? "-fx-background-color:#077a33":"-fx-background-color:#c20a04");
     }
 
@@ -46,7 +50,7 @@ public class SeatLayoutItemController implements Initializable {
             System.out.println("SEAT POSITION : "+seatTitle);
             stateSelected = !stateSelected;
             selectSeatButton.setStyle(stateSelected ? "-fx-background-color:#e06b0b": type.equals(Utils.TYPE_NORMAL) ? "-fx-background-color:#72d684":"-fx-background-color:#077a33");
-            onSeatItemClickedListener.onSeatItemClicked(seatTitle,stateSelected,type);
+            onSeatItemClickedListener.onSeatItemClicked(seatTitle,stateSelected,type, ticketType.getPrice());
         }
         else{
             System.out.println("NOT CLICKEDDDDDDDDDDD");
@@ -68,6 +72,16 @@ public class SeatLayoutItemController implements Initializable {
         selectSeatButton.setStyle( type.equals(Utils.TYPE_NORMAL) ? "-fx-background-color:#72d684": type.equals(Utils.TYPE_PRIME) ? "-fx-background-color:#077a33": type.equals(Utils.TYPE_SELECTED) ? "-fx-background-color:#c20a04":"-fx-background-color:#e06b0b");
         //System.out.println("CHANGE COLOR");
     }
+
+    //TRẢ VỀ LOẠI VÉ NORMAL HOẶC PRIME
+    public TicketType getTicketType() {
+        return ticketType;
+    }
+    //SET LOẠI VÉ
+    public void setTicketType(String type) {
+        this.ticketType.setType(type);
+    }
+
 
     //ĐẶT TÊN GHẾ : E1, E2...
     public void setSeatTitle(String str){

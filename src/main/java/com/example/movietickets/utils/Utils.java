@@ -17,5 +17,13 @@ public class Utils {
     public static String SLOT_3_45_PM = "03:45 PM";
     public static String SLOT_7_00_PM = "07:00 PM";
     public static String SLOT_9_45_PM = "09:45 PM";
+
+    //TICKET TYPE
+    public static String TICKER_NORMAL = "TICKER_NORMAL";
+    public static String TICKER_PRIME = "TICKER_PRIME";
+    //PRICE FOR EACH TYPE
+    public static int PRICE_NORMAL = 65000;
+    public static int PRICE_PRIME = 85000;
+
 }
 
