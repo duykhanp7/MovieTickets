@@ -1,5 +1,10 @@
 package com.example.movietickets.utils;
 
+import com.example.movietickets.model.ConnectionToDatabaseController;
+import javafx.scene.paint.ImagePattern;
+
+import java.util.*;
+
 public class Utils {
     public static final String API_MOVIE_DOMAIN = "https://api.themoviedb.org";
     public static final String API_KEY = "904b3059ddd54e71c45dc72502d59375";
@@ -24,6 +29,19 @@ public class Utils {
     //PRICE FOR EACH TYPE
     public static int PRICE_NORMAL = 65000;
     public static int PRICE_PRIME = 85000;
+    //EMAIL AUTHENTICATE
+    public static final String EMAIL = "duykhangp7@gmail.com";
+    public static final String PASSWORD = "0397439979adAD";
+    //KHUNG THỜI GIAN
+    public static final String[] timeSlots = new String[]{Utils.SLOT_9_45_AM,Utils.SLOT_1_00_PM,Utils.SLOT_3_45_PM,Utils.SLOT_7_00_PM,Utils.SLOT_9_45_PM};
+    public static final String[] verticalTitle = new String[]{"J","I","H","G","F","","E","D","C","B","A"};
+
+    public static List<String> getListTimeSlots(){
+        return Arrays.asList(timeSlots);
+    }
+    //TYPE CUSTOMER - LOẠI KHÁCH HÀNG
+    public static final String CUSTOMER_NORMAL = "NORMAL";
+    public static final String CUSTOMER_PRIME = "PRIME";
 
 }
 

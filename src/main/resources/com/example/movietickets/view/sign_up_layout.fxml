@@ -27,7 +27,7 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="BOTTOM_CENTER" prefHeight="104.0" prefWidth="430.0" spacing="103.0">
+            <HBox alignment="BOTTOM_CENTER" prefHeight="71.0" prefWidth="430.0" spacing="103.0">
                <children>
                   <Label prefHeight="36.0" prefWidth="60.0" text="Full name" textFill="WHITE">
                      <font>
@@ -63,6 +63,19 @@
                         <Font name="Agency FB" size="18.0" />
                      </font></TextField>
                </children></HBox>
+            <HBox alignment="CENTER" prefHeight="33.0" prefWidth="430.0" spacing="140.0">
+               <children>
+                  <Label text="Sex" textFill="WHITE">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="comboBoxSex" prefWidth="150.0" style="-fx-background-color: #d98609;" />
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </HBox>
             <HBox alignment="CENTER" prefHeight="51.0" prefWidth="430.0">
                <children>
                   <Label prefHeight="24.0" prefWidth="197.0" text="Password" textFill="WHITE">
@@ -143,9 +156,37 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="97.0" prefWidth="430.0">
+            <HBox alignment="CENTER" prefHeight="7.0" prefWidth="200.0" spacing="20.0">
                <children>
-                  <Button fx:id="buttonSignUp" alignment="BOTTOM_CENTER" mnemonicParsing="false" onMouseClicked="#onButtonSignUpClick" prefHeight="38.0" prefWidth="108.0" text="Sign Up">
+                  <Button fx:id="buttonSendCode" mnemonicParsing="false" onMouseClicked="#onButtonSendCode" prefHeight="28.0" prefWidth="88.0" style="-fx-background-color: #d98609;" text="Send Code">
+                     <font>
+                        <Font name="Agency FB" size="15.0" />
+                     </font>
+                  </Button>
+                  <TextField fx:id="textFieldConfirmCode" alignment="CENTER" prefHeight="25.0" prefWidth="104.0">
+                     <font>
+                        <Font name="Agency FB" size="18.0" />
+                     </font></TextField>
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="430.0">
+               <children>
+                  <Label fx:id="textViewCodeMatch" text="(*) This code does not match " textFill="#ff7d00" visible="false">
+                     <font>
+                        <Font name="Agency FB" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets right="40.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="94.0" prefWidth="430.0">
+               <children>
+                  <Button fx:id="buttonSignUp" alignment="BOTTOM_CENTER" mnemonicParsing="false" onMouseClicked="#onButtonSignUpClick" prefHeight="38.0" prefWidth="108.0" style="-fx-background-color: #d98609;" text="Sign Up">
                      <font>
                         <Font name="Agency FB" size="20.0" />
                      </font>

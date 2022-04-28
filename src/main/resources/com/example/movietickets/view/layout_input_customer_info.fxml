@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="411.0" prefWidth="455.0" style="-fx-background-color: #4a2870;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.LayoutInputCustomerInfoController">
+   <children>
+      <VBox alignment="TOP_CENTER" layoutY="14.0" prefHeight="500.0" prefWidth="455.0">
+         <children>
+            <HBox alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" prefHeight="111.0" prefWidth="455.0" text="Customer information" textFill="WHITE">
+                     <font>
+                        <Font name="Agency FB" size="30.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="6.0" prefWidth="455.0" spacing="50.0">
+               <children>
+                  <Label text="Phone Number" textFill="WHITE">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="phoneNumberField" alignment="CENTER" disable="true" prefHeight="34.0" prefWidth="186.0">
+                     <font>
+                        <Font name="Agency FB" size="18.0" />
+                     </font></TextField>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT">
+               <children>
+                  <Label fx:id="textViewInvalidPhoneNumber" text="(*) Invalid Phone Number" textFill="#ff7b00" visible="false">
+                     <font>
+                        <Font name="Agency FB" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="15.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets right="50.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="31.0" prefWidth="455.0" spacing="80.0">
+               <children>
+                  <Label text="Full Name" textFill="WHITE">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="fullNameField" alignment="CENTER" prefHeight="35.0" prefWidth="188.0">
+                     <font>
+                        <Font name="Agency FB" size="18.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="4.0" prefWidth="455.0">
+               <children>
+                  <Label fx:id="textViewInvalidName" text="(*) Invalid full name" textFill="#ff7b00" visible="false">
+                     <font>
+                        <Font name="Agency FB" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets right="80.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="7.0" prefWidth="455.0" spacing="118.0">
+               <children>
+                  <Label text="Sex" textFill="WHITE">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="comboBoxSex" prefHeight="36.0" prefWidth="150.0" style="-fx-background-color: #d98609;" />
+               </children>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT">
+               <children>
+                  <CheckBox fx:id="checkBoxUsingDiscount" mnemonicParsing="false" text="Using Discount" textFill="WHITE" visible="false">
+                     <font>
+                        <Font name="Agency FB" size="14.0" />
+                     </font></CheckBox>
+               </children>
+               <padding>
+                  <Insets right="50.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER">
+               <children>
+                  <Button fx:id="buttonAgreeInfor" mnemonicParsing="false" onAction="#OnButtonCompleteInformationCustomer" prefHeight="38.0" prefWidth="94.0" style="-fx-background-color: #d98609;" text="Agree">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="86.0" prefWidth="455.0" spacing="20.0">
+               <children>
+                  <Button fx:id="buttonUpToVip" mnemonicParsing="false" onAction="#OnButtonUpgradeToVIP" prefHeight="33.0" prefWidth="85.0" style="-fx-background-color: #d98609;" text="VIP">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="buttonVipCustomer" mnemonicParsing="false" onAction="#OnButtonVipCustomer" prefHeight="38.0" prefWidth="122.0" style="-fx-background-color: #d98609;" text="VIP Customers">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets right="20.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

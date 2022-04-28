@@ -20,9 +20,9 @@ public interface API {
             .build().create(API.class);
 
 
-    //LẤY DANH SÁCH PHIM PHỔ BIẾN TỪ API THEO TRANG
+    //LẤY DANH SÁCH PHIM ĐANG CHIẾU TỪ API THEO TRANG
     //https://api.themoviedb.org/3/movie/now_playing?api_key=904b3059ddd54e71c45dc72502d59375&page=2
-    @GET("/3/movie/popular")
+    @GET("/3/movie/now_playing")
     Call<MovieObject> getMoviesPopular(@Query("api_key") String api_key,@Query("page") String page);
 
 

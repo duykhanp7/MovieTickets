@@ -17,4 +17,10 @@ module com.example.movietickets {
     requires retrofit2;
     requires retrofit2.converter.gson;
     requires com.google.gson;
+    requires java.mail;
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
+    requires java.sql;
+    requires mysql.connector.java;
+
 }

@@ -2,22 +2,16 @@ package com.example.movietickets.model;
 
 public class People {
 
-    String id;
-    String name;
-    String identifyCard;
-    String email;
-    String phoneNumber;
-    String sex;
-    String address;
+    String id, name, identifyCard, email, phoneNumber, sex, address;
 
-    public People(String id, String name, String identifyCard, String email, String phoneNumber, String sex, String address) {
-        this.id = id;
-        this.name = name;
-        this.identifyCard = identifyCard;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.sex = sex;
-        this.address = address;
+    public People() {
+        this.id = "";
+        this.name = "";
+        this.identifyCard = "";
+        this.email = "";
+        this.phoneNumber = "";
+        this.sex = "";
+        this.address = "";
     }
 
     public String getId() {

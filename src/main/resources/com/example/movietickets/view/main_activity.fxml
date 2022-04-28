@@ -36,19 +36,19 @@
                                 <Insets />
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="buttonMovieScreens" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="314.0" style="-fx-background-color: #4a2870;" text="Movie Screens" textFill="WHITE">
-                            <font>
-                                <Font name="Agency FB" size="30.0" />
-                            </font>
-                        </Button>
-                        <Button fx:id="buttonMore" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="296.0" style="-fx-background-color: #4a2870;" text="More" textFill="WHITE">
+                        <Button fx:id="buttonMore" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="296.0" style="-fx-background-color: #4a2870;" text="Add" textFill="WHITE">
                             <font>
                                 <Font name="Agency FB" size="30.0" />
                             </font>
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin></Button>
-                        <Button fx:id="buttonLogout" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="294.0" style="-fx-background-color: #4a2870;" text="Log out" textFill="WHITE">
+                        <Button fx:id="buttonMovieScreens" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="314.0" style="-fx-background-color: #4a2870;" text="Movie Screens" textFill="WHITE">
+                            <font>
+                                <Font name="Agency FB" size="30.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="buttonLogout" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onButtonClicked" onMouseClicked="#onButtonClickedChangeBackgroundColor" onMouseEntered="#onMouseHoveredOnButton" prefHeight="65.0" prefWidth="294.0" style="-fx-background-color: #4a2870;" text="More" textFill="WHITE">
                             <font>
                                 <Font name="Agency FB" size="30.0" />
                             </font>
@@ -68,24 +68,107 @@
                   </Label>
                </children>
             </VBox>
-                <Pane fx:id="PaneLogOut" style="-fx-background-color: #1f5411#1f5411;" />
-                <Pane fx:id="PaneAdd" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #83bd73;" />
-                <Pane fx:id="PaneMovieScreens" style="-fx-background-color: #8f968d;" />
-            <HBox fx:id="PaneHome">
+            <HBox fx:id="PaneMovieScreens" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #d5d6bf;">
+               <children>
+                  <VBox prefHeight="801.0" prefWidth="1076.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="60.0" prefWidth="1087.0" text="Screen">
+                                 <font>
+                                    <Font name="Agency FB" size="50.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <GridPane fx:id="gridPaneMovieScreen" alignment="CENTER" prefHeight="522.0" prefWidth="1071.0">
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <padding>
+                              <Insets left="150.0" />
+                           </padding>
+                        </GridPane>
+                        <HBox alignment="CENTER" prefHeight="233.0" prefWidth="1071.0" spacing="50.0">
+                           <children>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="143.0" prefWidth="200.0" spacing="20.0">
+                                       <children>
+                                          <TextField fx:id="idCinemaText" alignment="CENTER" prefHeight="35.0" prefWidth="200.0" promptText="ID Cinema">
+                                             <font>
+                                                <Font name="Agency FB" size="18.0" />
+                                             </font>
+                                          </TextField>
+                                          <TextField fx:id="nameCinemaText" alignment="CENTER" prefHeight="35.0" prefWidth="200.0" promptText="Name Cinema">
+                                             <font>
+                                                <Font name="Agency FB" size="18.0" />
+                                             </font>
+                                          </TextField>
+                                          <Button fx:id="buttonAddCinema" mnemonicParsing="false" onAction="#onButtonAddNewCinema" prefHeight="35.0" prefWidth="103.0" style="-fx-background-color: #d98609;" text="Add Cinema">
+                                             <font>
+                                                <Font name="Agency FB" size="20.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </VBox>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets bottom="20.0" />
+                                 </HBox.margin>
+                              </HBox>
+                              <VBox alignment="CENTER" prefHeight="105.0" prefWidth="150.0" spacing="30.0">
+                                 <children>
+                                    <ComboBox fx:id="comboBoxCinemaMovieScreen" prefWidth="150.0" style="-fx-background-color: #d98609;" />
+                                    <ComboBox fx:id="comboBoxTimeSlots" prefWidth="150.0" style="-fx-background-color: #d98609;" />
+                                    <Button fx:id="buttonReloadMovieScreen" alignment="CENTER" mnemonicParsing="false" onAction="#onButtonReload" prefHeight="35.0" prefWidth="86.0" style="-fx-background-color: #d98609;" text="Reload">
+                                       <font>
+                                          <Font name="Agency FB" size="20.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets bottom="20.0" left="30.0" />
+                                 </HBox.margin>
+                              </VBox>
+                               <HBox prefHeight="100.0" prefWidth="200.0">
+                                   <children>
+                                       <VBox alignment="CENTER" prefHeight="143.0" prefWidth="200.0" spacing="30.0">
+                                           <children>
+                                          <ComboBox fx:id="comboBoxDeleteCinema" prefWidth="150.0" style="-fx-background-color: #d98609;" />
+                                               <Button fx:id="buttonDeleteCinema" mnemonicParsing="false" onAction="#onButtonDeleteCinema" prefHeight="35.0" prefWidth="123.0" style="-fx-background-color: #d98609;" text="Delete Cinema">
+                                                   <font>
+                                                       <Font name="Agency FB" size="20.0" />
+                                                   </font>
+                                               </Button>
+                                           </children>
+                                           <HBox.margin>
+                                               <Insets />
+                                           </HBox.margin>
+                                       </VBox>
+                                   </children>
+                                   <HBox.margin>
+                                       <Insets bottom="20.0" left="20.0" />
+                                   </HBox.margin>
+                               </HBox>
+                           </children>
+                           <padding>
+                              <Insets top="20.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children></HBox>
+            <HBox fx:id="PaneMore" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #bda2dd;">
                <children>
                   <VBox alignment="TOP_CENTER">
                      <children>
                         <HBox alignment="TOP_RIGHT" prefHeight="51.0" prefWidth="1071.0" spacing="20.0" style="-fx-background-color: #bda2dd;">
                            <children>
-                              <Button fx:id="buttonMoviesRecently" mnemonicParsing="false" onAction="#showMoviesTicketsSoldRecently" prefHeight="33.0" prefWidth="189.0" text="Recently Sold Movie Tickets" underline="true">
-                                 <font>
-                                    <Font name="Agency FB" size="16.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <TextField fx:id="textFieldSearch" alignment="CENTER" onKeyPressed="#onEnterPressed" prefHeight="48.0" prefWidth="219.0">
+                              <TextField fx:id="textFieldSearch" alignment="CENTER" onKeyPressed="#onEnterPressed" prefHeight="48.0" prefWidth="219.0" promptText="Enter Movie Name">
                                  <HBox.margin>
                                     <Insets bottom="5.0" />
                                  </HBox.margin>
@@ -106,7 +189,7 @@
                               <Insets />
                            </VBox.margin>
                            <padding>
-                              <Insets bottom="10.0" right="60.0" top="5.0" />
+                              <Insets bottom="10.0" right="60.0" top="20.0" />
                            </padding>
                         </HBox>
                         <StackPane prefHeight="779.0" prefWidth="1071.0">
@@ -128,7 +211,7 @@
                                  <content>
                                     <VBox prefHeight="802.0" prefWidth="1071.0" style="-fx-background-color: #bda2dd;">
                                        <children>
-            
+
                                            <GridPane fx:id="gridAdapter" prefHeight="262.0" prefWidth="317.0">
                                                <rowConstraints>
                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
@@ -146,7 +229,136 @@
                         </StackPane>
                      </children>
                   </VBox>
+               </children>
+            </HBox>
+            <HBox fx:id="PaneHome" style="-fx-background-color: #bda2dd;">
+               <children>
+                  <VBox>
+                     <children>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Button fx:id="buttonMoviesRecently" mnemonicParsing="false" onAction="#showMoviesTicketsSoldRecently" prefHeight="33.0" prefWidth="189.0" style="-fx-background-color: #d98609;" text="Recently Sold Movie Tickets" underline="true">
+                                 <font>
+                                    <Font name="Agency FB" size="16.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets left="30.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                        <GridPane fx:id="gridLayoutSoldMovie" prefHeight="801.0" prefWidth="1071.0">
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
+                     </children>
+                  </VBox>
                </children></HBox>
+            <HBox fx:id="PaneLogOut" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #bda2dd;">
+               <children>
+                  <VBox prefHeight="801.0" prefWidth="1073.0">
+                     <children>
+                        <HBox alignment="CENTER_RIGHT" spacing="20.0">
+                           <children>
+                              <Button fx:id="buttonExcel" mnemonicParsing="false" onAction="#onButtonExcel" style="-fx-background-color: #d98609;" text="Export customer's information and bills">
+                                 <font>
+                                    <Font name="Agency FB" size="20.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="buttonSignUp" mnemonicParsing="false" onAction="#onButtonSignUp" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: #d98609;" text="Sign Up">
+                                 <font>
+                                    <Font name="Agency FB" size="20.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="buttonChangePassword" mnemonicParsing="false" onAction="#onButtonChangePassword" prefHeight="38.0" prefWidth="144.0" style="-fx-background-color: #d98609;" text="Change Password">
+                                 <font>
+                                    <Font name="Agency FB" size="20.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="buttonLogOut" mnemonicParsing="false" onAction="#onButtonLogout" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: #d98609;" text="Log Out">
+                                 <font>
+                                    <Font name="Agency FB" size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="20.0" right="20.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <ScrollPane prefHeight="753.0" prefWidth="1071.0" style="-fx-background-color: #bda2dd;">
+                           <content>
+                              <VBox alignment="CENTER" prefHeight="739.0" prefWidth="1072.0" style="-fx-background-color: #bda2dd;">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="345.0" prefWidth="1072.0">
+                                       <children>
+                                          <Label text="Customer">
+                                             <font>
+                                                <Font name="Agency FB Bold" size="30.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TableView fx:id="tableViewCustomerInformation" prefHeight="278.0" prefWidth="798.0" style="-fx-background-color: #bda2dd;">
+                                            <columns>
+                                              <TableColumn fx:id="columnID" prefWidth="114.0" text="ID" />
+                                              <TableColumn fx:id="columnName" prefWidth="153.0" text="Full Name" />
+                                                <TableColumn fx:id="columnPhoneNumber" prefWidth="189.0" text="Phone Number" />
+                                                <TableColumn fx:id="columnSex" minWidth="0.0" prefWidth="169.0" text="Sex" />
+                                                <TableColumn fx:id="columnTypeCustomer" prefWidth="108.0" text="Type" />
+                                                <TableColumn fx:id="columnPoint" prefWidth="212.0" text="Points" />
+                                            </columns>
+                                             <VBox.margin>
+                                                <Insets left="100.0" right="100.0" />
+                                             </VBox.margin>
+                                          </TableView>
+                                       </children>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="371.0" prefWidth="1072.0">
+                                       <children>
+                                          <Label text="Customer's Bill">
+                                             <font>
+                                                <Font name="Agency FB Bold" size="30.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets top="10.0" />
+                                             </padding>
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TableView fx:id="tableViewCustomerBill" prefHeight="340.0" prefWidth="1072.0" style="-fx-background-color: #bda2dd;">
+                                            <columns>
+                                              <TableColumn fx:id="columnIdBill" prefWidth="93.0" text="ID" />
+                                              <TableColumn fx:id="columnMovieName" prefWidth="206.0" text="MOVIE" />
+                                                <TableColumn fx:id="columnCinemaName" prefWidth="105.0" text="CINEMA" />
+                                                <TableColumn fx:id="columnTimeSlot" minWidth="0.0" prefWidth="99.0" text="TIME SLOT" />
+                                                <TableColumn fx:id="columnSeats" prefWidth="148.0" text="SEATS" />
+                                                <TableColumn fx:id="columnDateBought" prefWidth="170.0" text="DATE BOUGHT" />
+                                                <TableColumn fx:id="columnPrice" prefWidth="133.0" text="PRICE" />
+                                                <TableColumn fx:id="columnDiscount" prefWidth="77.0" text="DISCOUNT" />
+                                            </columns>
+                                             <VBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </VBox.margin>
+                                          </TableView>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
             </children>
         </StackPane>
     </children>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="456.0" prefWidth="649.0" style="-fx-background-color: #bda2dd #bda2dd;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.AddMovieToRoomController">
+   <children>
+      <VBox layoutY="-1.0" prefHeight="414.0" prefWidth="649.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="636.0" text="Change Movies" underline="true">
+               <font>
+                  <Font name="Agency FB" size="25.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets top="20.0" />
+               </padding></Label>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="345.0">
+               <children>
+                  <Label text="Old Movie" underline="true">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label text="New Movie" underline="true">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="255.0" prefWidth="601.0">
+               <children>
+                  <VBox prefHeight="257.0" prefWidth="150.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
+                     <children>
+                        <ImageView fx:id="oldImage" fitHeight="225.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport></ImageView>
+                        <Button fx:id="textViewTitleOld" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #d98609;" text="Title">
+                           <font>
+                              <Font name="Agency FB" size="16.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <ComboBox fx:id="comboBoxCinema" prefWidth="150.0" promptText="Choose Cinema" style="-fx-background-color: #d98609;">
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </ComboBox>
+                  <VBox prefHeight="257.0" prefWidth="150.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
+                     <children>
+                        <ImageView fx:id="newImage" fitHeight="225.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport></ImageView>
+                        <Button fx:id="textViewTitleNew" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #d98609;" text="Title">
+                           <font>
+                              <Font name="Agency FB" size="16.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="60.0" right="50.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding></HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="buttonAgreeChangeMovies" mnemonicParsing="false" onAction="#onButtonAgreeToChangeMovie" prefHeight="38.0" prefWidth="122.0" style="-fx-background-color: #d98609;" text="Agree" underline="true">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

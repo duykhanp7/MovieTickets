@@ -4,8 +4,8 @@ import com.example.movietickets.utils.Utils;
 
 public class TicketType {
 
-    String type;
-    int price;
+    String type;//LOẠI VÉ
+    int price;//GIÁ VÉ THEO LOẠI VÉ
 
     public TicketType() {
         this.type = Utils.TICKER_NORMAL;

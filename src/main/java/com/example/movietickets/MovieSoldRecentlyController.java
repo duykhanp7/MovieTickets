@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+
+//CONTROLLER XEM CÁC PHIM BÁN GẦN ĐÂY
 public class MovieSoldRecentlyController implements Initializable {
 
     //LAYOUT CHỨA CÁC PHIM BÁN GẦN ĐÂY
@@ -61,7 +63,7 @@ public class MovieSoldRecentlyController implements Initializable {
     public synchronized void addNewItem(MovieObject.Movie item){
 
         loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("view/item_movie.fxml"));
+        loader.setLocation(getClass().getResource("view/item_movie_sell.fxml"));
 
         AnchorPane anchorPane = null;
 

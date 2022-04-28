@@ -1,5 +1,7 @@
 package com.example.movietickets.interf;
 
+import com.example.movietickets.model.Seat;
+
 public interface OnSeatItemClickedListener {
-    void onSeatItemClicked(String text,boolean state,String type,int price);
+    void onSeatItemClicked(Seat seat);
 }

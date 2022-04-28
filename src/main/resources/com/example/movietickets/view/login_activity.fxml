@@ -52,20 +52,20 @@
                      <children>
                         <HBox alignment="BOTTOM_CENTER" prefHeight="54.0" prefWidth="455.0" spacing="20.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="44.0" prefWidth="102.0" text="Phone Number" textFill="WHITE">
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="44.0" prefWidth="102.0" text="Email" textFill="WHITE">
                                  <font>
                                     <Font name="Agency FB" size="20.0" />
                                  </font>
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
-                              </Label>
-                              <TextField fx:id="phoneNumberField" prefHeight="35.0" prefWidth="193.0">
                                  <padding>
-                                    <Insets left="20.0" />
+                                    <Insets right="10.0" />
                                  </padding>
+                              </Label>
+                              <TextField fx:id="emailField" alignment="CENTER" prefHeight="35.0" prefWidth="193.0">
                                  <font>
-                                    <Font name="Agency FB" size="15.0" />
+                                    <Font name="Agency FB" size="18.0" />
                                  </font></TextField>
                            </children>
                         </HBox>
@@ -87,17 +87,14 @@
                                     <Insets left="30.0" top="5.0" />
                                  </HBox.margin>
                                  <children>
-                                    <PasswordField fx:id="passwordFieldHide" prefHeight="35.0" prefWidth="196.0">
-                                       <padding>
-                                          <Insets left="20.0" />
-                                       </padding>
+                                    <PasswordField fx:id="passwordFieldHide" alignment="CENTER" onKeyPressed="#onEnterPressed" prefHeight="35.0" prefWidth="196.0">
                                        <font>
                                           <Font name="Agency FB" size="15.0" />
                                        </font>
                                     </PasswordField>
-                                    <TextField fx:id="passwordFieldShow" prefHeight="35.0" prefWidth="196.0">
+                                    <TextField fx:id="passwordFieldShow" alignment="CENTER" onKeyPressed="#onEnterPressed" prefHeight="35.0" prefWidth="196.0">
                                        <font>
-                                          <Font name="Agency FB" size="15.0" />
+                                          <Font name="Agency FB" size="18.0" />
                                        </font></TextField>
                                  </children>
                               </Pane>
@@ -122,7 +119,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="47.0" prefWidth="455.0">
                            <children>
-                              <Button fx:id="loginButton" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onButtonLogin" prefHeight="28.0" prefWidth="115.0" text="Login">
+                              <Button fx:id="loginButton" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onButtonLogin" prefHeight="28.0" prefWidth="115.0" style="-fx-background-color: #d98609;" text="Login">
                                  <font>
                                     <Font name="Agency FB" size="20.0" />
                                  </font>
@@ -134,7 +131,7 @@
                         </HBox>
                         <VBox alignment="CENTER_RIGHT">
                            <children>
-                              <Label fx:id="forgot_pass_button" alignment="CENTER_RIGHT" prefHeight="57.0" prefWidth="155.0" text="Forgot Password ?" textFill="WHITE" underline="true">
+                              <Label fx:id="forgot_pass_button" alignment="CENTER_RIGHT" onMouseClicked="#onButtonForgotPassword" prefHeight="57.0" prefWidth="155.0" text="Forgot Password ?" textFill="WHITE" underline="true">
                                  <font>
                                     <Font name="Agency FB" size="20.0" />
                                  </font>

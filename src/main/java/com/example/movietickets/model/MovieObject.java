@@ -1,11 +1,5 @@
 package com.example.movietickets.model;
 
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
-
 
 
 import com.google.gson.annotations.SerializedName;

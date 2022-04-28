@@ -1,5 +1,6 @@
 package com.example.movietickets;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import com.example.movietickets.interf.API;
@@ -8,6 +9,7 @@ import com.example.movietickets.utils.Utils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,6 +30,7 @@ public class MainApplication extends Application {
         stage.centerOnScreen();
         stage.setTitle("Cinema");
         stage.setScene(scene);
+        stage.getIcons().add(new Image(new FileInputStream("C:\\Users\\duy khan\\IdeaProjects\\MovieTickets\\src\\main\\resources\\com\\example\\movietickets\\image\\background_login.png")));
         stage.show();
     }
 

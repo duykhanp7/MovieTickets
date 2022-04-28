@@ -235,7 +235,7 @@
                                  <children>
                                     <HBox>
                                        <children>
-                                          <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="31.0" prefWidth="293.0" text="Ticket Details" underline="true">
+                                          <Label fx:id="textViewRoomName" alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="31.0" prefWidth="293.0" text="Ticket Details" underline="true">
                                              <font>
                                                 <Font name="Agency FB" size="25.0" />
                                              </font>
@@ -297,7 +297,7 @@
                               </VBox>
                               <HBox alignment="CENTER" prefHeight="195.0" prefWidth="218.0">
                                  <children>
-                                    <Button fx:id="buttonAgreeBuyTickets" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onButtonBookTicketsClick" prefHeight="36.0" prefWidth="125.0" text="Book Now" underline="true">
+                                    <Button fx:id="buttonAgreeBuyTickets" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onButtonBookTicketsClick" prefHeight="36.0" prefWidth="125.0" style="-fx-background-color: #d98609;" text="Book Now" underline="true">
                                        <font>
                                           <Font name="Agency FB" size="22.0" />
                                        </font>

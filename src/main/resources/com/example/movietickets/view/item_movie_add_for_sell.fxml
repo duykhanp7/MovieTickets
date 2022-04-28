@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="itemLayout" onMouseClicked="#onClick" onMouseEntered="#mouseHovered" prefHeight="272.0" prefWidth="111.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickets.ItemMovieAddForSellController">
+   <children>
+      <VBox prefHeight="272.0" prefWidth="123.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
+         <children>
+            <ImageView fx:id="itemPosterMovie" fitHeight="225.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+               <viewport>
+                  <Rectangle2D />
+               </viewport></ImageView>
+            <Label fx:id="itemTitleMovie" alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="150.0">
+               <font>
+                  <Font name="Agency FB Bold" size="16.0" />
+               </font>
+            </Label>
+            <Button fx:id="buyTicketButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#onButtonAddToRoom" onMouseEntered="#hoveredOnButtonBuyTickets" onMouseExited="#exitOnButtonBuyTickets" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #d98609;" text="Add To Room">
+               <font>
+                  <Font name="Agency FB" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

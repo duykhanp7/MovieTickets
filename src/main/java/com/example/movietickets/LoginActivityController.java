@@ -1,30 +1,32 @@
 package com.example.movietickets;
 
-import com.example.movietickets.model.SendSMS;
+import com.example.movietickets.model.ConnectionToDatabaseController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+//CONTROLLER ĐĂNG NHẬP
 public class LoginActivityController implements Initializable {
 
 
@@ -33,22 +35,27 @@ public class LoginActivityController implements Initializable {
     @FXML Label warningLogin;
     @FXML ImageView ic_show_pass;
     @FXML PasswordField passwordFieldHide;
-    @FXML TextField phoneNumberField;
+    @FXML TextField emailField;
     @FXML TextField passwordFieldShow;
     @FXML Button loginButton;
 
     boolean showPass = false;
+    ConnectionToDatabaseController controller;
+    Connection connection;
 
     //SIGN UP LAYOUT
-    Stage signUpStage = new Stage();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         showHidePassWord(showPass);
+        controller = new ConnectionToDatabaseController();
+        connection = controller.getConnection();
     }
 
     //NẾU TRUE THÌ SHOW PASS, KHÔNG THÌ THÔI
+    //HIỂN THỊ HOẶC ẨN PASSWORD
     public void showHidePassWord(boolean state){
+        //NẾU STATE BẰNG TRUE THÌ SẼ HIỂN THỊ PASSWORD
         if(state){
             Platform.runLater(new Runnable() {
                 @Override
@@ -65,6 +72,7 @@ public class LoginActivityController implements Initializable {
             });
 
         }
+        //NGƯỢC LẠI SẼ ẨN PASSWORD
         else{
             Platform.runLater(new Runnable() {
                 @Override
@@ -93,32 +101,50 @@ public class LoginActivityController implements Initializable {
     public void onButtonLogin(ActionEvent actionEvent){
         //KIỂM TRA ACCOUNT HỢP LỆ KHÔNG
         //NẾU HỢP LỆ THÌ CHUYỂN SANG MÀN HÌNH LÀM VIỆC CHÍNH
-        boolean validAccount = checkInformationLoginValid(phoneNumberField.getText(),passwordFieldHide.getText());
+        login();
+    }
+
+
+    //XỬ LÝ SỰ KIỆN ĐĂNG NHẬP
+    public void login(){
+        boolean validAccount = checkInformationLoginValid(emailField.getText(),passwordFieldHide.getText());
+        System.out.println(validAccount);
+        //KIỂM TRA TÀI KHOẢN HỢP LỆ HAY KHÔNG
+        //EMAIL ĐÚNG FORMAT VÀ MẬT KHẨU KHÁC RỖNG
         if(validAccount){
-            //LOAD STAGE CỦA LOGIN ACTIVITY VÀ ĐÓNG NÓ
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-            Stage stageMain = new Stage();
-            Scene scene = null;
-            warningLogin.setVisible(false);
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(MainApplication.class.getResource("view/main_activity.fxml"));
-            try {
-                scene = new Scene(fxmlLoader.load(), 1200.0D, 650.0D);
-            } catch (IOException e) {
-                e.printStackTrace();
+            //KIỂM TRA TÀI KHOẢN CÓ TỒN TẠI HAY KHÔNG
+            if(checkAccountExits()){
+                Stage stage = (Stage) loginButton.getScene().getWindow();
+                Stage stageMain = new Stage();
+                Scene scene = null;
+                warningLogin.setVisible(false);
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(MainApplication.class.getResource("view/main_activity.fxml"));
+                try {
+                    scene = new Scene(fxmlLoader.load(), 1200.0D, 650.0D);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                MainController mainController = fxmlLoader.getController();
+                mainController.setLoginActivityController(this);
+                stageMain.centerOnScreen();
+                stageMain.setTitle("Cinema");
+                try {
+                    stageMain.getIcons().add(new Image(new FileInputStream("C:\\Users\\duy khan\\IdeaProjects\\MovieTickets\\src\\main\\resources\\com\\example\\movietickets\\image\\background_login.png")));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                stageMain.setScene(scene);
+                stageMain.show();
+                stage.close();
             }
-            MainController mainController = fxmlLoader.getController();
-            mainController.setLoginActivityController(this);
-            stageMain.centerOnScreen();
-            stageMain.setTitle("Cinema");
-            try {
-                stageMain.getIcons().add(new Image(new FileInputStream("C:\\Users\\duy khan\\IdeaProjects\\MovieTickets\\src\\main\\resources\\com\\example\\movietickets\\image\\background_login.png")));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Sign Up");
+                alert.setHeaderText("Email or password not incorrect, please check again! !");
+                alert.initOwner(loginButton.getScene().getWindow());
+                alert.showAndWait();
             }
-            stageMain.setScene(scene);
-            stageMain.show();
-            stage.close();
         }
         else {
             warningLogin.setVisible(true);
@@ -127,18 +153,19 @@ public class LoginActivityController implements Initializable {
 
 
     //KIỂM TRA SĐT VA PASSWORD ĐÃ ĐÚNG CHƯA
-    public boolean checkInformationLoginValid(String phoneNumber, String passWord){
+    public boolean checkInformationLoginValid(String email, String passWord){
         //REGEX VALID PHONE NUMBER
         //SĐT ĐÚNG BẮT ĐẦU BẰNG 0 VÀ TỐI ĐA 10 SỐ
         //ĐÚNG TRẢ VỀ TRUE, SAI TRẢ VỀ FALSE
-        Pattern pattern = Pattern.compile("0+[0-9]{9}");
-        Matcher matcher = pattern.matcher(phoneNumber);
-        return matcher.matches();
+        Pattern pattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches() && !passWord.isEmpty();
     }
 
     //BẮT SỰ KIỆN CLICK TRÊN BUTTON SIGN UP
     //TẠO BẢNG ĐĂNG KÍ TÀI KHOẢN
     public void onClickButtonSignUp(MouseEvent mouseEvent){
+        Stage signUpStage = new Stage();
         Scene scene = null;
         if (signUpStage.getScene() == null) {
             System.out.println("FIRST INIT");
@@ -152,10 +179,63 @@ public class LoginActivityController implements Initializable {
             signUpStage.setResizable(false);
             signUpStage.setScene(scene);
             signUpStage.initModality(Modality.APPLICATION_MODAL);
+            try {
+                signUpStage.getIcons().add(new Image(new FileInputStream("C:\\Users\\duy khan\\IdeaProjects\\MovieTickets\\src\\main\\resources\\com\\example\\movietickets\\image\\background_login.png")));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             signUpStage.setTitle("Sign Up");
         }
         System.out.println("SHOWs");
         signUpStage.show();
     }
+
+    //BẮT SỰ KIỆN NÚT QUÊN MẬT KHẨU
+    @FXML
+    public void onButtonForgotPassword(MouseEvent mouseEvent){
+        Stage stageForgotPass = new Stage();
+        stageForgotPass.setTitle("Forgot Password");
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("view/forgot_password_layout.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(loader.load(),500,450);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            stageForgotPass.getIcons().add(new Image(new FileInputStream("C:\\Users\\duy khan\\IdeaProjects\\MovieTickets\\src\\main\\resources\\com\\example\\movietickets\\image\\background_login.png")));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        stageForgotPass.setScene(scene);
+        stageForgotPass.show();
+    }
+
+    //BẮT SỰ KIỆN KHI NHẤN ENTER TRÊN FIELD PASSWORD
+    @FXML
+    public void onEnterPressed(KeyEvent keyEvent){
+        if(keyEvent.getCode() == KeyCode.ENTER){
+            System.out.println("ENTER PRESSED ON TEXTFIELD");
+            login();
+        }
+    }
+
+    //KIỂM TRA ACCOUNT TỒN TẠI HAY KHÔNG
+    public boolean checkAccountExits(){
+        String username = emailField.getText().trim();
+        String password = passwordFieldHide.getText().trim();
+        String query = String.format("SELECT * FROM ACCOUNT WHERE USERNAME='%s' AND PASSWORD = '%s'",username,password);
+        ResultSet resultSet = null;
+        boolean check = false;
+        try {
+            resultSet = connection.createStatement().executeQuery(query);
+            check = resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
 
 }
